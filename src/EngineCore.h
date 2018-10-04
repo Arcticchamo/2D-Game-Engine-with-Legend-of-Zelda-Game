@@ -10,6 +10,7 @@
 #define SCREEN_HEIGHT 480
 
 class Camera;
+class Player;
 class ShaderProgram;
 class VertexArray;
 class VertexBuffer;
@@ -20,7 +21,9 @@ private:
 	SDL_Window *m_window;
 
 	std::vector < std::shared_ptr<Camera> > m_cameraList;
-
+	std::shared_ptr<ShaderProgram> m_shaderProgram;
+	std::shared_ptr<Player> m_player;
+	
 
 public:
 	void StartEngine();

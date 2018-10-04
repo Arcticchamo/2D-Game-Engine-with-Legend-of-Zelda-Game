@@ -2,11 +2,16 @@
 #include <GL/glew.h>
 #include <memory>
 
+#include "GameObject.h"
+
 class VertexBuffer;
 class VertexArray;
 class ShaderProgram;
 
-class Player
+
+
+
+class Player : public GameObject
 {
 private:
 	std::shared_ptr<VertexArray> m_attributes;
@@ -22,4 +27,5 @@ public:
 
 	void SetShader(std::shared_ptr<ShaderProgram>);
 
+	std::shared_ptr<VertexArray> GetVAO() { return m_attributes; }
 };

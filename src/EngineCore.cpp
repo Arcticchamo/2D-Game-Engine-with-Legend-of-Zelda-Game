@@ -1,9 +1,11 @@
 #include "EngineCore.h"
 
 #include "Camera.h"
+#include "Player.h"
+#include "ShaderProgram.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
-#include "ShaderProgram.h"
+
 
 void EngineCore::StartEngine()
 {
@@ -26,7 +28,9 @@ void EngineCore::StartEngine()
 		throw std::exception();
 	}
 
-	std::shared_ptr<ShaderProgram> Shades = std::make_shared<ShaderProgram>("../shaders/simple.vert", "../shaders/simple.frag");
+
+	m_player = std::make_shared<Player>();
+	m_shaderProgram = std::make_shared<ShaderProgram>("../shaders/simple.vert", "../shaders/simple.frag");
 
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
 	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -63,12 +67,12 @@ void EngineCore::UpdateEngine()
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(-50, -50, 0.0f));
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
 
-		shaderProgram->setUniform("in_ModelMat", modelMatrix);
+		m_shaderProgram->setUniform("in_ModelMat", modelMatrix);
 
-		Shades->setUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
-		Shades->setUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
+		m_shaderProgram->setUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
+		m_shaderProgram->setUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
-		shaderProgram->Draw(shape);
+		m_shaderProgram->Draw(m_player->GetVAO());
 
 		angle++;
 
@@ -94,4 +98,5 @@ std::shared_ptr<Camera> EngineCore::GetMainCamera()
 			return (*it);
 		}
 	}
+	return NULL;
 }

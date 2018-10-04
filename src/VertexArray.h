@@ -15,7 +15,7 @@ public:
 
 	VertexArray();
 	
-	void setBuffer(std::string, VertexBuffer*);
+	void setBuffer(std::string, std::shared_ptr<VertexBuffer>);
 	int getVertexCount();
 	GLuint getId();
 };
