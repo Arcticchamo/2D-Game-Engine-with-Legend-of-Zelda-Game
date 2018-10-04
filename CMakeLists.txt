@@ -22,23 +22,28 @@ if(MSVC)
 endif()
 
 add_executable(LoZ
-  src/main.cpp
-  src/VertexBuffer.h
-  src/VertexBuffer.cpp
-  src/VertexArray.h
-  src/VertexArray.cpp
-  src/ShaderProgram.h
-  src/ShaderProgram.cpp
-  src/Camera.h
-  src/Camera.cpp
-  src/Player.h
-  src/Player.cpp
-  src/Component.h
-  src/Component.cpp
-  src/EngineCore.h
-  src/EngineCore.cpp
-  src/GameObject.h
-  src/GameObject.cpp
+
+src/Camera.h
+src/Component.h
+src/EngineCore.h
+src/GameObject.h
+src/MeshRenderer.h
+src/Mesh.h
+src/Object.h
+src/Player.h
+src/ShaderProgram.h
+src/VertexArray.h
+src/VertexBuffer.h
+
+src/Camera.cpp
+src/EngineCore.cpp
+src/main.cpp
+src/Mesh.cpp
+src/MeshRenderer.cpp
+src/Player.cpp
+src/ShaderProgram.cpp
+src/VertexArray.cpp
+src/VertexBuffer.cpp 
 )
 
 if(MSVC)
