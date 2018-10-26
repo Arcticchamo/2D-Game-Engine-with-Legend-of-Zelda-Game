@@ -31,6 +31,7 @@ src/MeshRenderer.h
 src/Mesh.h
 src/Object.h
 src/Player.h
+src/Resources.h
 src/ShaderProgram.h
 src/VertexArray.h
 src/VertexBuffer.h
@@ -41,6 +42,7 @@ src/main.cpp
 src/Mesh.cpp
 src/MeshRenderer.cpp
 src/Player.cpp
+src/Resources.cpp
 src/ShaderProgram.cpp
 src/VertexArray.cpp
 src/VertexBuffer.cpp 
