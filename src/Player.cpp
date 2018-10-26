@@ -1,23 +1,19 @@
 #include "Player.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "ShaderProgram.h"
+//#include "VertexBuffer.h"
+//#include "VertexArray.h"
+//#include "ShaderProgram.h"
+#include "Mesh.h"
+#include "MeshRenderer.h"
+#include "Resources.h"
 
 Player::Player()
 {
-	VertexBuffer *positions = new VertexBuffer();
-	positions->add(glm::vec3(0.0f, 1.0f, 0.0f));
-	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
-	positions->add(glm::vec3(1.0f, 0.0f, 0.0f));
+	
+}
 
-	VertexBuffer *colors = new VertexBuffer();
-	colors->add(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	colors->add(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	colors->add(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
-	m_attributes = std::make_shared<VertexArray>();
-	m_attributes->setBuffer("in_Position", positions);
-	m_attributes->setBuffer("in_Color", colors);
+Player::Player(std::string _textureFilePath)
+{
+	m_textureFilePath = _textureFilePath;
 }
 
 Player::~Player()
@@ -26,20 +22,41 @@ Player::~Player()
 
 void Player::Start()
 {
-	
+	m_mesh = AddComponent<Mesh>();
+	m_meshRenderer = AddComponent<MeshRenderer>();
 
-
+	m_mesh.lock()->CreateTexture(m_textureFilePath);
 }
 
 void Player::Update()
 {
+	//PLAYER MESHRENDERER RENDERER GOES HERE
+
+	//m_meshRenderer.Lock()->
 }
 
 void Player::Destroy()
 {
 }
 
-void Player::SetShader(std::shared_ptr<ShaderProgram> _program)
+void Player::Render()
 {
-	m_shader = _program;
+	glActiveTexture(GL_TEXTURE0 + 1);
+	glBindTexture(GL_TEXTURE_2D, m_mesh.lock()->GetTextureID());
+	Resources::SetUniform("in_Texture", 1);
+
+
+	glUseProgram(Resources::GetProgram());
+	glBindVertexArray(m_mesh.lock()->GetID());
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+	//m_meshRenderer.lock()->Update();
+}
+
+GLuint Player::GetVAO()
+{
+	return m_meshRenderer.lock()->GetID();
 }

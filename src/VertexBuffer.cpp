@@ -14,6 +14,18 @@ VertexBuffer::VertexBuffer()
 	}
 }
 
+void VertexBuffer::add(glm::vec2 _data)
+{
+	if (m_components != 2 && m_components != 0)
+	{
+		throw std::exception();
+	}
+	m_data.push_back(_data.x);
+	m_data.push_back(_data.y);
+	m_components = 2;
+	m_dirty = true;
+}
+
 void VertexBuffer::add(glm::vec3 _data)
 {
 	if (m_components != 3 && m_components != 0)
@@ -60,6 +72,8 @@ GLuint VertexBuffer::getId()
 		glBufferData(GL_ARRAY_BUFFER, m_data.size() * sizeof(float), &m_data.at(0), GL_STATIC_DRAW);
 		// Reset the state
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		m_dirty = false;
 	}
 
 	return m_id;

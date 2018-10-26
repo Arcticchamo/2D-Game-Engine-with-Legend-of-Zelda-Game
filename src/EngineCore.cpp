@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "Player.h"
+#include "Resources.h"
 #include "ShaderProgram.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
@@ -29,8 +30,11 @@ void EngineCore::StartEngine()
 	}
 
 
-	m_player = std::make_shared<Player>();
-	m_shaderProgram = std::make_shared<ShaderProgram>("../shaders/simple.vert", "../shaders/simple.frag");
+	m_player = std::make_shared<Player>("../GC.png");
+	m_player->Start();
+
+	//m_shaderProgram = std::make_shared<ShaderProgram>("../shaders/simple.vert", "../shaders/simple.frag");
+	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
 
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
 	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -61,18 +65,25 @@ void EngineCore::UpdateEngine()
 		SDL_GetWindowSize(m_window, &w, &h);
 		glViewport(0, 0, w, h);
 
+
 		glm::mat4 modelMatrix(1.0f);
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(50, 50, 0.0f));
+		modelMatrix = glm::translate(modelMatrix, glm::vec3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
 		modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(0, 0, 1));
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(-50, -50, 0.0f));
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
 
-		m_shaderProgram->setUniform("in_ModelMat", modelMatrix);
+		//m_shaderProgram->setUniform("in_ModelMat", modelMatrix);
+		Resources::SetUniform("in_ModelMat", modelMatrix);
 
-		m_shaderProgram->setUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
-		m_shaderProgram->setUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
+		//m_shaderProgram->setUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
+		//m_shaderProgram->setUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
-		m_shaderProgram->Draw(m_player->GetVAO());
+		Resources::SetUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
+		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
+
+		//m_shaderProgram->Draw(m_player->GetVAO());
+
+		m_player->Render();
 
 		angle++;
 

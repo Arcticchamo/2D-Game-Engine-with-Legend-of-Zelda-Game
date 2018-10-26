@@ -23,7 +23,7 @@ public:
 	GLuint GenerateFragmentShader(const char*);
 	void CreateProgram(GLuint, GLuint);
 
-	void Draw(std::weak_ptr<VertexArray>);
+	void Draw(GLuint);
 
 	void ShaderProgram::setUniform(std::string, glm::vec4);
 	void ShaderProgram::setUniform(std::string, float value);

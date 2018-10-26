@@ -11,7 +11,7 @@
 class Component;
 class Transform;
 
-class GameObject : public Object, std::enable_shared_from_this<GameObject>
+class GameObject : public Object, public std::enable_shared_from_this<GameObject>
 {
 private:
 	
@@ -33,11 +33,13 @@ public:
 	//GameObject* GetGameObject();
 
 	template <class CompType>
-	std::weak_ptr<CompType> AddComponent()
+	std::shared_ptr<CompType> AddComponent()
 	{
 		std::shared_ptr<CompType> Temp = std::make_shared<CompType>();
 		m_components.push_back(Temp);
-		Temp->setObject(shared_from_this());
+		//shared_from_this();
+		Temp->SetObject(shared_from_this());
+		Temp->Init();
 		return Temp;
 	}
 

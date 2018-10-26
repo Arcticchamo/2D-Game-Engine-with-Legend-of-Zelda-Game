@@ -23,6 +23,8 @@ public:
 		m_gameObject = _object;
 	}
 
+	virtual void Init() {};
+
 	virtual ~Component() {};
 };
 

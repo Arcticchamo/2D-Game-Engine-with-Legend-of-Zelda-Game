@@ -1,9 +1,20 @@
-#include "ShaderProgram.h"
-#include "VertexArray.h"
+#include "Resources.h"
 
-ShaderProgram::ShaderProgram()
+GLuint Resources::globalProgram;
+
+
+Resources::Resources()
 {
-	m_id = 0;
+}
+
+
+Resources::~Resources()
+{
+}
+
+void Resources::Start()
+{
+	globalProgram = 0;
 
 	std::string vertShader = ReadFile("../shaders/simple.vert");
 	std::string fragShader = ReadFile("../shaders/simple.frag");
@@ -16,18 +27,18 @@ ShaderProgram::ShaderProgram()
 
 	CreateProgram(vertexShaderId, fragmentShaderId);
 
-	glDetachShader(m_id, vertexShaderId);
+	glDetachShader(globalProgram, vertexShaderId);
 	glDeleteShader(vertexShaderId);
-	glDetachShader(m_id, fragmentShaderId);
+	glDetachShader(globalProgram, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
 }
 
-ShaderProgram::ShaderProgram(std::string _vertex, std::string _fragment)
+void Resources::Start(std::string _vert, std::string _frag)
 {
-	m_id = 0;
+	globalProgram = 0;
 
-	std::string vertShader = ReadFile(_vertex);
-	std::string fragShader = ReadFile(_fragment);
+	std::string vertShader = ReadFile(_vert);
+	std::string fragShader = ReadFile(_frag);
 
 	const char *vertex = vertShader.c_str();
 	const char *fragment = fragShader.c_str();
@@ -37,20 +48,15 @@ ShaderProgram::ShaderProgram(std::string _vertex, std::string _fragment)
 
 	CreateProgram(vertexShaderId, fragmentShaderId);
 
-	glDetachShader(m_id, vertexShaderId);
+	glDetachShader(globalProgram, vertexShaderId);
 	glDeleteShader(vertexShaderId);
-	glDetachShader(m_id, fragmentShaderId);
+	glDetachShader(globalProgram, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
 }
 
-ShaderProgram::~ShaderProgram()
+std::string Resources::ReadFile(std::string _fileName)
 {
-
-}
-
-std::string ShaderProgram::ReadFile(std::string _filename)
-{
-	std::ifstream file(_filename);
+	std::ifstream file(_fileName);
 	std::string text;
 
 	if (!file.is_open())
@@ -71,7 +77,7 @@ std::string ShaderProgram::ReadFile(std::string _filename)
 	return text;
 }
 
-GLuint ShaderProgram::GenerateVertexShader(const char *_vertex)
+GLuint Resources::GenerateVertexShader(const char* _vertex)
 {
 	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShaderId, 1, &_vertex, NULL);
@@ -85,7 +91,7 @@ GLuint ShaderProgram::GenerateVertexShader(const char *_vertex)
 	return vertexShaderId;
 }
 
-GLuint ShaderProgram::GenerateFragmentShader(const char *_fragment)
+GLuint Resources::GenerateFragmentShader(const char*_fragment)
 {
 	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShaderId, 1, &_fragment, NULL);
@@ -99,80 +105,82 @@ GLuint ShaderProgram::GenerateFragmentShader(const char *_fragment)
 	return fragmentShaderId;
 }
 
-void ShaderProgram::CreateProgram(GLuint _vertexId, GLuint _fragmentId)
+void Resources::CreateProgram(GLuint _vertexId, GLuint _fragmentId)
 {
-	m_id = glCreateProgram();
-	glAttachShader(m_id, _vertexId);
-	glAttachShader(m_id, _fragmentId);
+	globalProgram = glCreateProgram();
+	glAttachShader(globalProgram, _vertexId);
+	glAttachShader(globalProgram, _fragmentId);
 	// Ensure the VAO "position" attribute stream gets set as the first position
 	// during the link.
-	glBindAttribLocation(m_id, 0, "in_Position");
-	glBindAttribLocation(m_id, 1, "in_Color");
-	glBindAttribLocation(m_id, 2, "in_TexCoord");
+	glBindAttribLocation(globalProgram, 0, "in_Position");
+	glBindAttribLocation(globalProgram, 1, "in_Color");
 	// Perform the link and check for failure
-	glLinkProgram(m_id);
+	glLinkProgram(globalProgram);
 	GLint success = 0;
-	glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+	glGetProgramiv(globalProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		throw std::exception();
 	}
 }
 
-void ShaderProgram::Draw(GLuint _id)
+void Resources::SetUniform(std::string _uniform, int _value)
 {
-	glUseProgram(m_id);
-	glBindVertexArray(_id);
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	glBindVertexArray(0);
-	glUseProgram(0);
-}
-
-void ShaderProgram::setUniform(std::string _uniform, glm::vec4 _value)
-{
-	GLint uniformId = glGetUniformLocation(m_id, _uniform.c_str());
+	GLint uniformId = glGetUniformLocation(globalProgram, _uniform.c_str());
 
 	if (uniformId == -1)
 	{
 		throw std::exception();
 	}
 
-	glUseProgram(m_id);
-	glUniform4f(uniformId, _value.x, _value.y, _value.z, _value.w);
+	glUseProgram(globalProgram);
+	glUniform1i(uniformId, _value);
 	glUseProgram(0);
 }
 
-void ShaderProgram::setUniform(std::string _uniform, float _value)
+void Resources::SetUniform(std::string _uniform, float _value)
 {
-	GLint uniformId = glGetUniformLocation(m_id, _uniform.c_str());
+	GLint uniformId = glGetUniformLocation(globalProgram, _uniform.c_str());
 
 	if (uniformId == -1)
 	{
 		throw std::exception();
 	}
 
-	glUseProgram(m_id);
+	glUseProgram(globalProgram);
 	glUniform1f(uniformId, _value);
 	glUseProgram(0);
 }
 
-void ShaderProgram::setUniform(std::string _uniform, glm::mat4 _value)
+void Resources::SetUniform(std::string _uniform, glm::vec4 _value)
 {
-	GLint uniformId = glGetUniformLocation(m_id, _uniform.c_str());
+	GLint uniformId = glGetUniformLocation(globalProgram, _uniform.c_str());
 
 	if (uniformId == -1)
 	{
 		throw std::exception();
 	}
 
-	glUseProgram(m_id);
+	glUseProgram(globalProgram);
+	glUniform4f(uniformId, _value.x, _value.y, _value.z, _value.w);
+	glUseProgram(0);
+}
+
+void Resources::SetUniform(std::string _uniform, glm::mat4 _value)
+{
+	GLint uniformId = glGetUniformLocation(globalProgram, _uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		throw std::exception();
+	}
+
+	glUseProgram(globalProgram);
 	glUniformMatrix4fv(uniformId, 1, GL_FALSE, glm::value_ptr(_value));
 	glUseProgram(0);
 }
 
-GLuint ShaderProgram::getId()
+GLuint Resources::GetProgram()
 {
-	return m_id;
+	return globalProgram;
 }

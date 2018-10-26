@@ -25,6 +25,10 @@ void VertexArray::setBuffer(std::string _name, std::shared_ptr<VertexBuffer> _bu
 	{
 		m_buffers.at(1) = _buffer;
 	}
+	else if (_name == "in_TexCoord")
+	{
+		m_buffers.at(2) = _buffer;
+	}
 	else
 	{
 		throw std::exception();

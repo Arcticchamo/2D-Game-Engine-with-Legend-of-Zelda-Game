@@ -4,28 +4,28 @@
 
 #include "GameObject.h"
 
-class VertexBuffer;
-class VertexArray;
-class ShaderProgram;
-
-
+class Mesh;
+class MeshRenderer;
 
 
 class Player : public GameObject
 {
 private:
-	std::shared_ptr<VertexArray> m_attributes;
-	std::weak_ptr<ShaderProgram> m_shader;
+	std::weak_ptr<MeshRenderer> m_meshRenderer;
+	std::weak_ptr<Mesh> m_mesh;
+
+	std::string m_textureFilePath;
 
 public:
 	Player();
+	Player(std::string);
 	~Player();
 
 	void Start();
 	void Update();
 	void Destroy();
 
-	void SetShader(std::shared_ptr<ShaderProgram>);
+	void Render();
 
-	std::shared_ptr<VertexArray> GetVAO() { return m_attributes; }
+	GLuint GetVAO();
 };

@@ -14,6 +14,7 @@ private:
 public:
 	VertexBuffer();
 
+	void add(glm::vec2);
 	void add(glm::vec3);
 	void add(glm::vec4);
 	int getComponents();
