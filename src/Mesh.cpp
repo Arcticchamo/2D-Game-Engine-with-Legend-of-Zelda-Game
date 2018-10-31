@@ -37,7 +37,7 @@ void Mesh::Init()
 
 void Mesh::CreateTexture(std::string _fileLoc)
 {
-	int w = 0;
+	/*int w = 0;
 	int h = 0;
 	int channels = 0;
 
@@ -54,7 +54,7 @@ void Mesh::CreateTexture(std::string _fileLoc)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	free(data);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 }
 
 void Mesh::Update()

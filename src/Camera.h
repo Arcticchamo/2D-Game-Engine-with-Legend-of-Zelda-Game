@@ -23,7 +23,7 @@ public:
 
 	void CreateCamera(std::string, int, int);
 	void TranslateViewMatrix(glm::vec3);
-	void UpdateCamera();
+	void UpdateCamera(int _screenWidth, int _screenHeight);
 
 	CAMERA_TYPE getCameraType() { return m_cameraType; }
 };

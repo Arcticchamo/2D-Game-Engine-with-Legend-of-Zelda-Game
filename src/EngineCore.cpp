@@ -3,7 +3,6 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Resources.h"
-#include "ShaderProgram.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 
@@ -33,12 +32,15 @@ void EngineCore::StartEngine()
 	m_player = std::make_shared<Player>("../GC.png");
 	m_player->Start();
 
-	//m_shaderProgram = std::make_shared<ShaderProgram>("../shaders/simple.vert", "../shaders/simple.frag");
 	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
 
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
 	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_cameraList.push_back(main_camera);
+
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	
 }
 
 void EngineCore::UpdateEngine()
@@ -59,12 +61,19 @@ void EngineCore::UpdateEngine()
 		}
 
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int w = 0, h = 0;
 		SDL_GetWindowSize(m_window, &w, &h);
 		glViewport(0, 0, w, h);
 
+		for (int i = 0; i < m_cameraList.size(); i++)
+		{
+			m_cameraList.at(i)->UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+		}
+
+		Resources::SetUniform("in_ViewMat", glm::inverse(GetMainCamera()->GetViewMatrix()));
+		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
 		glm::mat4 modelMatrix(1.0f);
 		modelMatrix = glm::translate(modelMatrix, glm::vec3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
@@ -72,21 +81,13 @@ void EngineCore::UpdateEngine()
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(-50, -50, 0.0f));
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
 
-		//m_shaderProgram->setUniform("in_ModelMat", modelMatrix);
 		Resources::SetUniform("in_ModelMat", modelMatrix);
 
-		//m_shaderProgram->setUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
-		//m_shaderProgram->setUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
-
-		Resources::SetUniform("in_ViewMat", GetMainCamera()->GetViewMatrix());
-		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
-
-		//m_shaderProgram->Draw(m_player->GetVAO());
+		
 
 		m_player->Render();
 
 		angle++;
-
 		SDL_GL_SwapWindow(m_window);
 	}
 }

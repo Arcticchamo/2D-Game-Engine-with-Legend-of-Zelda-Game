@@ -29,7 +29,8 @@ void Camera::TranslateViewMatrix(glm::vec3 _viewPos)
 	m_viewingMatrix = glm::translate(m_viewingMatrix, _viewPos);
 }
 
-void Camera::UpdateCamera()
+void Camera::UpdateCamera(int _screenWidth, int _screenHeight)
 {
-
+	m_viewingMatrix = glm::mat4(1.0f);
+	m_projectionMatrix = glm::ortho(0.0f, (float)_screenWidth, (float)_screenHeight, 0.0f, -1.0f, 1.0f);
 }

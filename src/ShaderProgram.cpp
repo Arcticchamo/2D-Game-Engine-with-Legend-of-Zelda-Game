@@ -158,6 +158,20 @@ void ShaderProgram::setUniform(std::string _uniform, float _value)
 	glUseProgram(0);
 }
 
+void ShaderProgram::setUniform(std::string _uniform, int _value)
+{
+	GLint uniformId = glGetUniformLocation(m_id, _uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		throw std::exception();
+	}
+
+	glUseProgram(m_id);
+	glUniform1i(uniformId, _value);
+	glUseProgram(0);
+}
+
 void ShaderProgram::setUniform(std::string _uniform, glm::mat4 _value)
 {
 	GLint uniformId = glGetUniformLocation(m_id, _uniform.c_str());

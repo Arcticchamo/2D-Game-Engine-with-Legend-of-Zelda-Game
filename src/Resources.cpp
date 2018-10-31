@@ -1,12 +1,12 @@
 #include "Resources.h"
+#include "Texture.h"
+#include "VertexArray.h"
 
 GLuint Resources::globalProgram;
-
+std::vector<Sampler> Resources::samplers;
 
 Resources::Resources()
-{
-}
-
+{}
 
 Resources::~Resources()
 {
@@ -114,6 +114,7 @@ void Resources::CreateProgram(GLuint _vertexId, GLuint _fragmentId)
 	// during the link.
 	glBindAttribLocation(globalProgram, 0, "in_Position");
 	glBindAttribLocation(globalProgram, 1, "in_Color");
+	glBindAttribLocation(globalProgram, 2, "in_TexCoord");
 	// Perform the link and check for failure
 	glLinkProgram(globalProgram);
 	GLint success = 0;
@@ -122,6 +123,37 @@ void Resources::CreateProgram(GLuint _vertexId, GLuint _fragmentId)
 	{
 		throw std::exception();
 	}
+}
+
+void Resources::Draw(VertexArray *_vertex)
+{
+	glUseProgram(globalProgram);
+	glBindVertexArray(_vertex->getId());
+
+	for (size_t i = 0; i < samplers.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+
+		if (samplers.at(i).m_texture)
+		{
+			glBindTexture(GL_TEXTURE_2D, samplers.at(i).m_texture->GetId());
+		}
+		else
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+	}
+
+	glDrawArrays(GL_TRIANGLES, 0, _vertex->getVertexCount());
+
+	for (size_t i = 0; i < samplers.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	glBindVertexArray(0);
+	glUseProgram(0);
 }
 
 void Resources::SetUniform(std::string _uniform, int _value)
@@ -135,6 +167,38 @@ void Resources::SetUniform(std::string _uniform, int _value)
 
 	glUseProgram(globalProgram);
 	glUniform1i(uniformId, _value);
+	glUseProgram(0);
+}
+
+void Resources::SetUniform(std::string _uniform, std::shared_ptr<Texture> _texture)
+{
+	GLint uniformId = glGetUniformLocation(globalProgram, _uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		throw std::exception();
+	}
+
+	for (size_t i = 0; i < samplers.size(); i++)
+	{
+		if (samplers.at(i).uniformId == uniformId)
+		{
+			samplers.at(i).m_texture = _texture;
+
+			glUseProgram(globalProgram);
+			glUniform1i(uniformId, i);
+			glUseProgram(0);
+			return;
+		}
+	}
+
+	Sampler s;
+	s.uniformId = uniformId;
+	s.m_texture = _texture;
+	samplers.push_back(s);
+
+	glUseProgram(globalProgram);
+	glUniform1i(uniformId, samplers.size() - 1);
 	glUseProgram(0);
 }
 

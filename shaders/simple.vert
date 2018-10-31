@@ -9,6 +9,6 @@ varying vec2 ex_TexCoord;
 
 void main()
 {
-	gl_Position = in_ProjectionMat * in_ViewMat * in_ModelMat * vec4 (in_Position, 1);
+	gl_Position = in_ProjectionMat * in_ViewMat * in_ModelMat * vec4(in_Position, 1);
 	ex_TexCoord = in_TexCoord;
 }

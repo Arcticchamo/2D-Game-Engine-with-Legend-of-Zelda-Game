@@ -27,6 +27,7 @@ public:
 
 	void ShaderProgram::setUniform(std::string, glm::vec4);
 	void ShaderProgram::setUniform(std::string, float value);
+	void ShaderProgram::setUniform(std::string, int value);
 	void ShaderProgram::setUniform(std::string, glm::mat4);
 
 	GLuint getId();

@@ -1,5 +1,5 @@
 #include "Component.h"
-//#include "Resources.h"
+#include "Texture.h"
 
 #include <fstream>
 #include <GL/glew.h>
@@ -9,15 +9,18 @@
 #include <memory>
 #include <string>
 
-class Mesh;
+class VertexArray;
+class VertexBuffer;
 
 class MeshRenderer : public Component
 {
 private:
-	std::weak_ptr<Mesh> m_mesh;
-
 	GLuint m_id;
-
+	
+	std::shared_ptr<Texture> m_texture;
+	std::shared_ptr<VertexBuffer> m_positions;
+	std::shared_ptr<VertexBuffer> m_texCoords;
+	std::shared_ptr<VertexArray> m_sprite;
 public:
 	MeshRenderer();
 
@@ -26,7 +29,8 @@ public:
 	void Update();
 	void Destroy();
 	
-	GLuint GetID();
+	void Render();
 
+	GLuint GetID();
 	~MeshRenderer();
 };

@@ -4,6 +4,7 @@
 
 #include "Object.h"
 
+#include <GL/glew.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -13,14 +14,23 @@ class Transform;
 
 class GameObject : public Object, public std::enable_shared_from_this<GameObject>
 {
-private:
+protected:
 	
 	std::string m_name;
-	
+	std::string m_textureFilePath;
+
 	std::vector<std::shared_ptr<Component> > m_components;
 	std::weak_ptr<Transform> m_transform;
 
 public:
+
+	GameObject() {}
+
+	GameObject(std::string _texFileLoc)
+	{
+		m_textureFilePath = _texFileLoc;
+	}
+
 	virtual void Start() {};
 	virtual void Update() {};
 	virtual void Destroy() {};
@@ -30,7 +40,11 @@ public:
 		return std::weak_ptr<Transform>();
 	}
 
-	//GameObject* GetGameObject();
+	std::string GetTextureFilePath()
+	{
+		return m_textureFilePath;
+	}
+
 
 	template <class CompType>
 	std::shared_ptr<CompType> AddComponent()

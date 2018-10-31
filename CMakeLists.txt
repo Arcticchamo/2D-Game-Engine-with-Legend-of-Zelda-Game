@@ -28,24 +28,24 @@ src/Component.h
 src/EngineCore.h
 src/GameObject.h
 src/MeshRenderer.h
-src/Mesh.h
 src/Object.h
 src/Player.h
 src/Resources.h
-src/ShaderProgram.h
+src/Texture.h
 src/VertexArray.h
 src/VertexBuffer.h
 
 src/Camera.cpp
 src/EngineCore.cpp
 src/main.cpp
-src/Mesh.cpp
 src/MeshRenderer.cpp
 src/Player.cpp
 src/Resources.cpp
-src/ShaderProgram.cpp
+src/Texture.cpp
 src/VertexArray.cpp
 src/VertexBuffer.cpp 
+
+contrib/stb_image/stb_image.cpp
 )
 
 if(MSVC)
