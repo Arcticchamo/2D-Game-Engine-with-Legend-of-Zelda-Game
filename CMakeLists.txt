@@ -32,6 +32,7 @@ src/Object.h
 src/Player.h
 src/Resources.h
 src/Texture.h
+src/Transform.h
 src/VertexArray.h
 src/VertexBuffer.h
 
@@ -42,6 +43,7 @@ src/MeshRenderer.cpp
 src/Player.cpp
 src/Resources.cpp
 src/Texture.cpp
+src/Transform.cpp
 src/VertexArray.cpp
 src/VertexBuffer.cpp 
 

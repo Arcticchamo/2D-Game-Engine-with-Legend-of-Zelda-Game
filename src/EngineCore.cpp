@@ -67,7 +67,7 @@ void EngineCore::UpdateEngine()
 		SDL_GetWindowSize(m_window, &w, &h);
 		glViewport(0, 0, w, h);
 
-		for (int i = 0; i < m_cameraList.size(); i++)
+		for (size_t i = 0; i < m_cameraList.size(); i++)
 		{
 			m_cameraList.at(i)->UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
 		}
@@ -75,15 +75,13 @@ void EngineCore::UpdateEngine()
 		Resources::SetUniform("in_ViewMat", glm::inverse(GetMainCamera()->GetViewMatrix()));
 		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
-		glm::mat4 modelMatrix(1.0f);
-		modelMatrix = glm::translate(modelMatrix, glm::vec3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(0, 0, 1));
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(-50, -50, 0.0f));
-		modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
+		//glm::mat4 modelMatrix(1.0f);
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
+		//modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(0, 0, 1));
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3(-50, -50, 0.0f));
+		//modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
 
-		Resources::SetUniform("in_ModelMat", modelMatrix);
-
-		
+		//Resources::SetUniform("in_ModelMat", modelMatrix);
 
 		m_player->Render();
 

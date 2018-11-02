@@ -3,6 +3,7 @@
 #define GAMEOBJECT_H
 
 #include "Object.h"
+#include "Transform.h"
 
 #include <GL/glew.h>
 #include <memory>
@@ -10,7 +11,7 @@
 #include <vector>
 
 class Component;
-class Transform;
+
 
 class GameObject : public Object, public std::enable_shared_from_this<GameObject>
 {
