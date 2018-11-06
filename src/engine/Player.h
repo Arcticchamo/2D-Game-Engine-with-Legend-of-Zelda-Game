@@ -4,6 +4,7 @@
 
 #include "GameObject.h"
 
+
 class MeshRenderer;
 
 class Player : public GameObject
@@ -21,7 +22,7 @@ public:
 	void Update();
 	void Destroy();
 
-	void Render();
+	void InputController(glm::vec3 &_pos, glm::vec3 &_rot, glm::vec3 &_scale);
 
 	GLuint GetVAO();
 };

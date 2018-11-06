@@ -121,6 +121,13 @@ void Resources::CreateProgram(GLuint _vertexId, GLuint _fragmentId)
 	glGetProgramiv(globalProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
+		GLint maxLength = 0;
+		glGetShaderiv(globalProgram, GL_INFO_LOG_LENGTH, &maxLength);
+
+		// The maxLength includes the NULL character
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(globalProgram, maxLength, &maxLength, &errorLog[0]);
+
 		throw std::exception();
 	}
 }

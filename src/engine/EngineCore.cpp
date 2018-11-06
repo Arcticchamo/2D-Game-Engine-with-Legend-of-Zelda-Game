@@ -28,11 +28,11 @@ void EngineCore::StartEngine()
 		throw std::exception();
 	}
 
-
-	m_player = std::make_shared<Player>("../GC.png");
+	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
+	m_player = std::make_shared<Player>("../ZeldaSpriteLinkRight.png");
 	m_player->Start();
 
-	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
+	
 
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
 	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -60,7 +60,7 @@ void EngineCore::UpdateEngine()
 			}
 		}
 
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(1.0f, 0.95f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int w = 0, h = 0;
@@ -75,6 +75,8 @@ void EngineCore::UpdateEngine()
 		Resources::SetUniform("in_ViewMat", glm::inverse(GetMainCamera()->GetViewMatrix()));
 		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
+		m_player->Update();
+
 		//glm::mat4 modelMatrix(1.0f);
 		//modelMatrix = glm::translate(modelMatrix, glm::vec3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
 		//modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(0, 0, 1));
@@ -82,8 +84,6 @@ void EngineCore::UpdateEngine()
 		//modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
 
 		//Resources::SetUniform("in_ModelMat", modelMatrix);
-
-		m_player->Render();
 
 		angle++;
 		SDL_GL_SwapWindow(m_window);
