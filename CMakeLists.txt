@@ -53,8 +53,15 @@ contrib/stb_image/stb_image.cpp
 add_executable(MapGenerator
 
 src/mapgenerator/main.cpp
+src/mapgenerator/GenerateTileMap.cpp
+
+src/mapgenerator/GenerateTileMap.h
 
 contrib/stb_image/stb_image.cpp
+contrib/miniz/miniz_zip.c
+contrib/miniz/miniz.c
+contrib/miniz/miniz_tinfl.c
+contrib/miniz/miniz_tdef.c
 )
 
 if(MSVC)
