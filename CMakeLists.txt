@@ -23,10 +23,13 @@ endif()
 
 add_executable(LoZ
 
+src/engine/BackGroundMap.h
 src/engine/Camera.h
 src/engine/Component.h
+src/engine/CompressedMapLoader.h
 src/engine/EngineCore.h
 src/engine/GameObject.h
+src/engine/MapSpriteLoader.h
 src/engine/MeshRenderer.h
 src/engine/Object.h
 src/engine/Player.h
@@ -36,9 +39,12 @@ src/engine/Transform.h
 src/engine/VertexArray.h
 src/engine/VertexBuffer.h
 
+src/engine/BackGroundMap.cpp
 src/engine/Camera.cpp
+src/engine/CompressedMapLoader.cpp
 src/engine/EngineCore.cpp
 src/engine/main.cpp
+src/engine/MapSpriteLoader.cpp
 src/engine/MeshRenderer.cpp
 src/engine/Player.cpp
 src/engine/Resources.cpp
@@ -48,6 +54,9 @@ src/engine/VertexArray.cpp
 src/engine/VertexBuffer.cpp 
 
 contrib/stb_image/stb_image.cpp
+contrib/miniz/miniz.c
+contrib/miniz/miniz_tinfl.c
+contrib/miniz/miniz_tdef.c
 )
 
 add_executable(MapGenerator

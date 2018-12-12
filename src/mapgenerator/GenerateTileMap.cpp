@@ -58,6 +58,11 @@ void GenerateTileMap::GenerateRGB()
 	//Tracks what the index of the tile is 
 	int index = 0;
 
+	indexTracker.push_back(map.mapWidth);
+	indexTracker.push_back(map.mapHeight);
+	indexTracker.push_back(map.tileWidth);
+	indexTracker.push_back(map.tileHeight);
+
 	for (int i = 0; i < map.mapHeight; i += map.tileHeight)
 	{
 		for (int j = 0; j < map.mapWidth; j += map.tileWidth)
@@ -172,7 +177,7 @@ void GenerateTileMap::CreatePNG()
 
 void GenerateTileMap::CompressAndGenerateSpriteMap()
 {
-	uLong compressedLength = compressBound(indexTracker.size());
+	uLong compressedLength = compressBound(indexTracker.size() * sizeof(int));
 	std::vector<unsigned char> compressedIndexTracker;
 	compressedIndexTracker.resize(compressedLength);
 	int compressedStatus = compress(&compressedIndexTracker[0], &compressedLength, 
@@ -184,30 +189,43 @@ void GenerateTileMap::CompressAndGenerateSpriteMap()
 		throw std::exception();
 	}
 
+	//std::string fileOutLoc = output.outputFileLocation + "/"
+	//							+ output.fileName + ".txt";
+	//std::FILE *f = fopen(fileOutLoc.c_str(), "wb");
+
+	//if (f == NULL)
+	//{
+	//	throw std::exception();
+	//}
+
+	//for (int i = 0; i < compressedLength; i++)
+	//{
+	//	fprintf(f, "%c", compressedIndexTracker.at(i));
+	//}
+
+	//fclose(f);
+
 	std::ofstream myfile;
 	
 	if (output.outputFileLocation.length() != 0)
 	{
 		std::string fileOutLoc = output.outputFileLocation + "/" 
 								+ output.fileName + ".txt";
-		myfile.open(fileOutLoc.c_str());
+		myfile.open(fileOutLoc.c_str(), std::ios::binary);
 	}
 	else
 	{
 		std::string fileOutLoc = output.fileName + ".txt";
-		myfile.open(fileOutLoc.c_str());
+		myfile.open(fileOutLoc.c_str(), std::ios::binary);
 	}
 
 	if (myfile.is_open())
 	{
-		myfile << "w " << map.tileWidth << std::endl;
-		myfile << "h " << map.tileHeight << std::endl;
-		for (size_t i = 0; i < compressedIndexTracker.size(); i++)
+		//myfile << "w " << map.tileWidth << std::endl;
+		//myfile << "h " << map.tileHeight << std::endl;
+		for (size_t i = 0; i < compressedLength; i++)
 		{
-			if (compressedIndexTracker.at(i) != NULL)
-			{
-				myfile << compressedIndexTracker.at(i) << " ";
-			}
+			myfile << compressedIndexTracker.at(i);
 		}
 		myfile.close();
 	}

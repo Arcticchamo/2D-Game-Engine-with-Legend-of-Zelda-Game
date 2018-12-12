@@ -1,11 +1,14 @@
 #include "EngineCore.h"
 
+#include "BackGroundMap.h"
 #include "Camera.h"
 #include "Player.h"
 #include "Resources.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 
+#include "MapSpriteLoader.h"
+#include "CompressedMapLoader.h"
 
 void EngineCore::StartEngine()
 {
@@ -28,8 +31,17 @@ void EngineCore::StartEngine()
 		throw std::exception();
 	}
 
+	std::shared_ptr<MapSpriteLoader> spriteloads;
+	spriteloads = std::make_shared<MapSpriteLoader>();
+	std::shared_ptr<CompressedMapLoader> compmap;
+	compmap = std::make_shared<CompressedMapLoader>();
+
+	std::string test = "../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map.txt";
+	BackGroundMap map(test, compmap, spriteloads);
+
+
 	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
-	m_player = std::make_shared<Player>("../ZeldaSpriteLinkRight.png");
+	m_player = std::make_shared<Player>("../Link.png");
 	m_player->Start();
 
 	
@@ -76,14 +88,6 @@ void EngineCore::UpdateEngine()
 		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
 		m_player->Update();
-
-		//glm::mat4 modelMatrix(1.0f);
-		//modelMatrix = glm::translate(modelMatrix, glm::vec3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
-		//modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(0, 0, 1));
-		//modelMatrix = glm::translate(modelMatrix, glm::vec3(-50, -50, 0.0f));
-		//modelMatrix = glm::scale(modelMatrix, glm::vec3(100, 100, 1));
-
-		//Resources::SetUniform("in_ModelMat", modelMatrix);
 
 		angle++;
 		SDL_GL_SwapWindow(m_window);

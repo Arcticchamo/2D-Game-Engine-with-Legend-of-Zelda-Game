@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include <stdio.h>
+
 struct TileData
 {
 	int index = 0;

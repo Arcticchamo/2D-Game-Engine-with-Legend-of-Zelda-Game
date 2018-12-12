@@ -13,17 +13,14 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < argc; i++)
 	{
 		//Assign information
-		//image file path
-		if (!std::strcmp(argv[i], "-p")) 
+		
+		if (!std::strcmp(argv[i], "-p")) //image file path
 			fileLoc = argv[i + 1];
-		//tile width
-		if (!std::strcmp(argv[i], "-w")) 
+		if (!std::strcmp(argv[i], "-w")) //tile width
 			tWidth = atoi(argv[i + 1]);
-		//tile height
-		if (!std::strcmp(argv[i], "-h"))
+		if (!std::strcmp(argv[i], "-h")) //tile height
 			tHeight = atoi(argv[i + 1]);
-		//image output location
-		if (!std::strcmp(argv[i], "-o"))
+		if (!std::strcmp(argv[i], "-o")) //image output location
 			fileOut = argv[i + 1];
 	}
 

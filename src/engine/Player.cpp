@@ -59,18 +59,18 @@ void Player::Update()
 
 void Player::InputController(glm::vec3 & _pos, glm::vec3 & _rot, glm::vec3 & _scale)
 {
-	const Uint8* state = SDL_GetKeyboardState(NULL);
+	//const Uint8* state = SDL_GetKeyboardState(NULL);
 
-	if (state[SDL_SCANCODE_W]) _pos.y -= 10.0f;
-	if (state[SDL_SCANCODE_S]) _pos.y += 10.0f;
-	if (state[SDL_SCANCODE_A]) _pos.x -= 10.0f;
-	if (state[SDL_SCANCODE_D]) _pos.x += 10.0f;
+	//if (state[SDL_SCANCODE_W]) _pos.y -= 10.0f;
+	//if (state[SDL_SCANCODE_S]) _pos.y += 10.0f;
+	//if (state[SDL_SCANCODE_A]) _pos.x -= 10.0f;
+	//if (state[SDL_SCANCODE_D]) _pos.x += 10.0f;
 
-	if (state[SDL_SCANCODE_E]) _rot.z -= 0.1f;
-	if (state[SDL_SCANCODE_Q]) _rot.z += 0.1f;
+	//if (state[SDL_SCANCODE_E]) _rot.z -= 0.1f;
+	//if (state[SDL_SCANCODE_Q]) _rot.z += 0.1f;
 
-	if (state[SDL_SCANCODE_N]) _scale += 0.5f;
-	if (state[SDL_SCANCODE_M]) _scale -= 0.5f;
+	//if (state[SDL_SCANCODE_N]) _scale += 0.5f;
+	//if (state[SDL_SCANCODE_M]) _scale -= 0.5f;
 }
 
 void Player::Destroy()
