@@ -58,10 +58,10 @@ void GenerateTileMap::GenerateRGB()
 	//Tracks what the index of the tile is 
 	int index = 0;
 
-	indexTracker.push_back(map.mapWidth);
-	indexTracker.push_back(map.mapHeight);
 	indexTracker.push_back(map.tileWidth);
 	indexTracker.push_back(map.tileHeight);
+	indexTracker.push_back(map.mapWidth);
+	indexTracker.push_back(map.mapHeight);
 
 	for (int i = 0; i < map.mapHeight; i += map.tileHeight)
 	{

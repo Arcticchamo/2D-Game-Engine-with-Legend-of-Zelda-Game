@@ -36,8 +36,8 @@ void EngineCore::StartEngine()
 	std::shared_ptr<CompressedMapLoader> compmap;
 	compmap = std::make_shared<CompressedMapLoader>();
 
-	std::string test = "../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map.txt";
-	BackGroundMap map(test, compmap, spriteloads);
+	std::string FileLocation = "../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map";
+	BackGroundMap map(FileLocation, compmap, spriteloads);
 
 
 	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
