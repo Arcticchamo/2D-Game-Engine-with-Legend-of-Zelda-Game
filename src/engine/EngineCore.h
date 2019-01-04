@@ -9,6 +9,7 @@
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
+class BackGroundMap;
 class Camera;
 class Player;
 class ShaderProgram;
@@ -23,7 +24,7 @@ private:
 	std::vector < std::shared_ptr<Camera> > m_cameraList;
 	//std::shared_ptr<ShaderProgram> m_shaderProgram;
 	std::shared_ptr<Player> m_player;
-	
+	std::shared_ptr<BackGroundMap> map;
 
 public:
 	void StartEngine();

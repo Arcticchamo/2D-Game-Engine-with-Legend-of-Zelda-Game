@@ -1,5 +1,12 @@
 #include "GameObject.h"
 
+
+//#include "Transform.h"
+#include "MeshRenderer.h"
+
+#include <GL/glew.h>
+#include <glm/ext.hpp>
+
 #include <array>
 #include <iostream>
 #include <memory>
@@ -10,26 +17,44 @@
 class CompressedMapLoader;
 class MapSpriteLoader;
 
-struct TileData
-{
-	int xPosition; 
-	int yPosition;
+//class Transform;
+//class MeshRenderer;
 
-	//OPENGL TEXTURE STORAGE INSTEAD OF RGB DATA
+struct ChunkData
+{
+	glm::vec3 position;
+
+	MeshRenderer meshRenderer;
+	//Transform transform;
+
+	GLuint textureID;
+};
+
+struct ImageDataTile
+{
+	std::vector<unsigned char> RGBValues;
 };
 
 class BackGroundMap : public GameObject
 {
 private:
+	//Size of each individual tile (pre Chunk)
 	int tileWidth;
 	int tileHeight;
+	//Size of the Original map file 
 	int mapWidth;
 	int mapHeight;
+	//Size of the compressed map file
+	int compressedMapWidth;
+	int compressedMapHeight;
+
 
 	std::string fileLocation;
 	std::vector<int> unCompressedData;
 	std::vector<unsigned char> imageData;
-	std::vector<TileData> tiles;
+	std::vector<ImageDataTile> imageTiles;
+	std::vector<ChunkData> tiles;
+	
 
 	std::weak_ptr<CompressedMapLoader> compressedMapLoader;
 	std::weak_ptr<MapSpriteLoader> mapSpriteLoader;
@@ -42,8 +67,11 @@ public:
 
 	void GenerateBackGroundMap();
 	void CreateTileChunks();
-	void CreateChunk(int x, int y);
-	void GetRGBValues(int dataPos);
+	void CreateChunks(int x, int y);
+
+	void SeperateImageData();
+
+	void Display();
 
 	~BackGroundMap();
 };

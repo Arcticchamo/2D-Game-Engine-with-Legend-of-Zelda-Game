@@ -31,27 +31,25 @@ void EngineCore::StartEngine()
 		throw std::exception();
 	}
 
+	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
+	m_player = std::make_shared<Player>("../Link.png");
+	m_player->Start();
+
 	std::shared_ptr<MapSpriteLoader> spriteloads;
 	spriteloads = std::make_shared<MapSpriteLoader>();
 	std::shared_ptr<CompressedMapLoader> compmap;
 	compmap = std::make_shared<CompressedMapLoader>();
 
 	std::string FileLocation = "../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map";
-	BackGroundMap map(FileLocation, compmap, spriteloads);
-
-
-	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
-	m_player = std::make_shared<Player>("../Link.png");
-	m_player->Start();
-
-	
+	map = std::make_shared<BackGroundMap>(FileLocation, compmap, spriteloads);
+	//BackGroundMap map(FileLocation, compmap, spriteloads);
 
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
 	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_cameraList.push_back(main_camera);
 
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
+	//glEnable(GL_DEPTH_TEST);
 	
 }
 
@@ -88,6 +86,8 @@ void EngineCore::UpdateEngine()
 		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
 
 		m_player->Update();
+
+		map->Display();
 
 		angle++;
 		SDL_GL_SwapWindow(m_window);

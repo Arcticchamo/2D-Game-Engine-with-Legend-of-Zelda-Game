@@ -31,6 +31,11 @@ Texture::Texture(std::string _textureLocation)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+Texture::Texture(GLuint textureID)
+{
+	m_id = textureID;
+}
+
 GLuint Texture::GetId()
 {
 	return m_id;

@@ -144,6 +144,7 @@ void Resources::Draw(VertexArray *_vertex)
 		if (samplers.at(i).m_texture)
 		{
 			glBindTexture(GL_TEXTURE_2D, samplers.at(i).m_texture->GetId());
+			//glBindTexture(GL_TEXTURE_2D, 1);
 		}
 		else
 		{

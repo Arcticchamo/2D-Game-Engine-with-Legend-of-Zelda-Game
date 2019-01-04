@@ -1,6 +1,6 @@
 #include "MapSpriteLoader.h"
 
-void MapSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData)
+void MapSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData, int &w, int &h)
 {
 	int width = 0;
 	int height = 0;
@@ -12,6 +12,9 @@ void MapSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::vector<unsi
 	{
 		throw std::exception();
 	}
+
+	w = width;
+	h = height;
 
 	int size = (width * height) * 3;
 	imageData.resize(size);

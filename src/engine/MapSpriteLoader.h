@@ -8,6 +8,6 @@ class MapSpriteLoader
 private:
 
 public:
-	void LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData);
+	void LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData, int &w, int &h);
 	
 };

@@ -25,6 +25,8 @@ public:
 	MeshRenderer();
 
 	void Start();
+	void Start(GLuint textureID);
+
 	void Init();
 	void Update();
 	void Destroy();

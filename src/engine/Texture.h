@@ -9,5 +9,6 @@ private:
 
 public:
 	Texture(std::string);
+	Texture(GLuint textureID);
 	GLuint GetId();
 };

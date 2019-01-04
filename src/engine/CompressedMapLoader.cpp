@@ -35,7 +35,7 @@ void CompressedMapLoader::UncompressMapTxtFile(std::string fileLocation, std::ve
 	int newsize = output.size() / sizeof(int);
 	uncompressedData.resize(newsize);
 
-	memcpy(&uncompressedData.at(0), &output.at(0), size);
+	memcpy(&uncompressedData.at(0), &output.at(0), output.size());
 }
 
 //Loads in the file using C -- This is due to C++ not correcly reading in the txt file

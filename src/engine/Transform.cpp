@@ -5,7 +5,7 @@ Transform::Transform()
 {
 	m_position = glm::vec3(0, 0, 0);
 	m_rotation = glm::vec3(0, 0, 0);
-	m_scale = glm::vec3(0, 0, 0);
+	m_scale = glm::vec3(1, 1, 1);
 }
 
 Transform::Transform(glm::vec3 _posisition, glm::vec3 _rotation, glm::vec3 _scale)
@@ -18,6 +18,13 @@ Transform::Transform(glm::vec3 _posisition, glm::vec3 _rotation, glm::vec3 _scal
 Transform::~Transform()
 {
 
+}
+
+void Transform::SetPosRotScale(glm::vec3 _posisition, glm::vec3 _rotation, glm::vec3 _scale)
+{
+	m_position = _posisition;
+	m_rotation = _rotation;
+	m_scale = _scale;
 }
 
 void Transform::Translate(glm::vec3 _position)
