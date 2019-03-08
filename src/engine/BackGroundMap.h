@@ -2,7 +2,7 @@
 
 
 //#include "Transform.h"
-#include "MeshRenderer.h"
+//#include "MeshRenderer.h"
 
 #include <GL/glew.h>
 #include <glm/ext.hpp>
@@ -15,20 +15,21 @@
 #include <math.h>
 
 class CompressedMapLoader;
+class MapChunks;
 class MapSpriteLoader;
 
 //class Transform;
 //class MeshRenderer;
-
-struct ChunkData
-{
-	glm::vec3 position;
-
-	MeshRenderer meshRenderer;
-	//Transform transform;
-
-	GLuint textureID;
-};
+//
+//struct ChunkData
+//{
+//	glm::vec3 position;
+//
+//	MeshRenderer meshRenderer;
+//	//Transform transform;
+//
+//	GLuint textureID;
+//};
 
 struct ImageDataTile
 {
@@ -48,12 +49,12 @@ private:
 	int compressedMapWidth;
 	int compressedMapHeight;
 
-
 	std::string fileLocation;
 	std::vector<int> unCompressedData;
 	std::vector<unsigned char> imageData;
 	std::vector<ImageDataTile> imageTiles;
-	std::vector<ChunkData> tiles;
+
+	std::vector<MapChunks> chunks;	
 	
 
 	std::weak_ptr<CompressedMapLoader> compressedMapLoader;
@@ -67,7 +68,7 @@ public:
 
 	void GenerateBackGroundMap();
 	void CreateTileChunks();
-	void CreateChunks(int x, int y);
+	//void CreateChunks(int x, int y);
 
 	void SeperateImageData();
 

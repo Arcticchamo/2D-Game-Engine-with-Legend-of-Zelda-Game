@@ -29,6 +29,7 @@ src/engine/Component.h
 src/engine/CompressedMapLoader.h
 src/engine/EngineCore.h
 src/engine/GameObject.h
+src/engine/MapChunks.h
 src/engine/MapSpriteLoader.h
 src/engine/MeshRenderer.h
 src/engine/Object.h
@@ -44,6 +45,7 @@ src/engine/Camera.cpp
 src/engine/CompressedMapLoader.cpp
 src/engine/EngineCore.cpp
 src/engine/main.cpp
+src/engine/MapChunks.cpp
 src/engine/MapSpriteLoader.cpp
 src/engine/MeshRenderer.cpp
 src/engine/Player.cpp
