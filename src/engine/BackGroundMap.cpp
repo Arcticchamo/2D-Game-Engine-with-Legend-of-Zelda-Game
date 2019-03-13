@@ -2,15 +2,27 @@
 #include "CompressedMapLoader.h"
 #include "MapChunks.h"
 #include "MapSpriteLoader.h"
+#include "MeshRenderer.h"
 #include "Resources.h"
 
-BackGroundMap::BackGroundMap(std::string fileLocation, std::weak_ptr<CompressedMapLoader> compressedMapLoader, std::weak_ptr<MapSpriteLoader> mapSpriteLoader)
+std::shared_ptr<BackGroundMap> BackGroundMap::Init(std::string fileLocation, 
+	std::weak_ptr<CompressedMapLoader> compressedMapLoader, 
+	std::weak_ptr<MapSpriteLoader> mapSpriteLoader)
+{
+	std::shared_ptr<BackGroundMap> map;
+	map = std::shared_ptr<BackGroundMap>(new BackGroundMap(fileLocation, compressedMapLoader, mapSpriteLoader));
+	map->GenerateBackGroundMap();
+	return map;
+}
+
+BackGroundMap::BackGroundMap(std::string fileLocation, 
+	std::weak_ptr<CompressedMapLoader> compressedMapLoader, 
+	std::weak_ptr<MapSpriteLoader> mapSpriteLoader)
 {
 	this->fileLocation = fileLocation;
 	
 	this->compressedMapLoader = compressedMapLoader;
 	this->mapSpriteLoader = mapSpriteLoader;
-	GenerateBackGroundMap();
 }
 
 void BackGroundMap::GenerateBackGroundMap()
@@ -38,13 +50,13 @@ void BackGroundMap::CreateTileChunks()
 	//Calculate how many chunks is needed for the map
 	//If the map does not divide by 512, go to the next whole number
 	//This "black space" will be calculated later
-	int widthChunks = std::ceil(mapWidth / 512);
-	int heightChunks = std::ceil(mapHeight / 512);
+	int widthChunks = (int)std::ceil(mapWidth / 512);
+	int heightChunks = ((float)mapHeight / 512.0f) + 0.5f;
 
 	chunks.reserve(widthChunks * heightChunks);
 
 	SeperateImageData();
-
+	InitMeshInformation();
 	for (int y = 0; y < heightChunks; y++)
 	{
 		for (int x = 0; x < widthChunks; x++)
@@ -54,6 +66,8 @@ void BackGroundMap::CreateTileChunks()
 			chunks.push_back(newChunk);
 		}
 	}
+
+	//Wipe the vectors and arrays of information
 }
 
 void BackGroundMap::SeperateImageData()
@@ -66,15 +80,14 @@ void BackGroundMap::SeperateImageData()
 	{
 		//Create new ImageDataTile object
 		ImageDataTile newTile;
-
 		for (int y = 0; y < tileHeight; y++)
 		{
 			for (int x = 0; x < tileWidth; x++)
 			{
-				int f = y * compressedMapWidth * 3 + x * 3 + i * (16 * 3);
-				newTile.RGBValues.push_back(imageData.at(f));
-				newTile.RGBValues.push_back(imageData.at(f + 1));
-				newTile.RGBValues.push_back(imageData.at(f + 2));
+				int skip = (y * compressedMapWidth * 3 + x * 3) + (i * tileWidth * 3);
+				newTile.RGBValues.push_back(imageData.at(skip));
+				newTile.RGBValues.push_back(imageData.at(skip + 1));
+				newTile.RGBValues.push_back(imageData.at(skip + 2));
 			}
 		}
 		imageTiles.push_back(newTile);
@@ -83,22 +96,41 @@ void BackGroundMap::SeperateImageData()
 	imageData.clear();
 }
 
+void BackGroundMap::InitMeshInformation()
+{
+	meshRenderer = std::make_shared<MeshRenderer>();
+	meshRenderer->StartNoTexture();
+}
+
 void BackGroundMap::Display()
 {
-	//for (unsigned int i = 0; i < tiles.size(); i++)
-	//{
-	//	glm::mat4 model(1.0f);
-	//	model = glm::translate(model, tiles.at(i).position);
-	//	model = glm::scale(model, glm::vec3(512, 512, 1));
-	//	//model = glm::translate(model, glm::vec3(0, 0, 0));
-	//	
+	for (unsigned int i = 0; i < chunks.size(); i++)
+	{
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, chunks.at(i).GetPosition());
+		model = glm::scale(model, glm::vec3(512, 512, 1));
+		
+		Resources::SetUniform("in_ModelMat", model);
+		meshRenderer->Render(chunks.at(i).GetTexture());
+	}	
+}
 
-	//	//tiles.at(i).transform.UpdateModelMatrix();
-	//	Resources::SetUniform("in_ModelMat", model);
-	//	tiles.at(i).meshRenderer.Render();
-	//}
+unsigned int BackGroundMap::getImageTilesSize()
+{
+	return imageTiles.size();
+}
+
+unsigned int BackGroundMap::getImageTilesSize(int index)
+{
+	return imageTiles.at(index).RGBValues.size();
+}
+
+unsigned char BackGroundMap::getImageTileData(int tileIndex, int RGBindex)
+{
+	return imageTiles.at(tileIndex).RGBValues.at(RGBindex);
 }
 
 BackGroundMap::~BackGroundMap()
 {
 }
+

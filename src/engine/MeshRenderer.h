@@ -25,13 +25,14 @@ public:
 	MeshRenderer();
 
 	void Start();
-	void Start(GLuint textureID);
+	void StartNoTexture();
 
 	void Init();
 	void Update();
 	void Destroy();
 	
 	void Render();
+	void Render(std::shared_ptr<Texture> texture);
 
 	GLuint GetID();
 	~MeshRenderer();

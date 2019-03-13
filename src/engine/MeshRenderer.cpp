@@ -39,7 +39,7 @@ void MeshRenderer::Start()
 	m_texture = std::make_shared<Texture>(m_gameObject.lock()->GetTextureFilePath());
 }
 
-void MeshRenderer::Start(GLuint textureID)
+void MeshRenderer::StartNoTexture()
 {
 	m_positions = std::make_shared<VertexBuffer>();
 	m_texCoords = std::make_shared<VertexBuffer>();
@@ -64,8 +64,6 @@ void MeshRenderer::Start(GLuint textureID)
 
 	m_sprite->setBuffer("in_Position", m_positions);
 	m_sprite->setBuffer("in_TexCoord", m_texCoords);
-
-	m_texture = std::make_shared<Texture>(textureID);
 }
 
 void MeshRenderer::Update()
@@ -76,6 +74,12 @@ void MeshRenderer::Update()
 void MeshRenderer::Render()
 {
 	Resources::SetUniform("in_Texture", m_texture);
+	Resources::Draw(m_sprite.get());
+}
+
+void MeshRenderer::Render(std::shared_ptr<Texture> texture)
+{
+	Resources::SetUniform("in_Texture", texture);
 	Resources::Draw(m_sprite.get());
 }
 

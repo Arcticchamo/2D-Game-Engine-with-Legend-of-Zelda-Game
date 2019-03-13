@@ -1,9 +1,5 @@
 #include "GameObject.h"
 
-
-//#include "Transform.h"
-//#include "MeshRenderer.h"
-
 #include <GL/glew.h>
 #include <glm/ext.hpp>
 
@@ -17,19 +13,7 @@
 class CompressedMapLoader;
 class MapChunks;
 class MapSpriteLoader;
-
-//class Transform;
-//class MeshRenderer;
-//
-//struct ChunkData
-//{
-//	glm::vec3 position;
-//
-//	MeshRenderer meshRenderer;
-//	//Transform transform;
-//
-//	GLuint textureID;
-//};
+class MeshRenderer;
 
 struct ImageDataTile
 {
@@ -56,11 +40,11 @@ private:
 
 	std::vector<MapChunks> chunks;	
 	
+	std::shared_ptr<MeshRenderer> meshRenderer;
 
 	std::weak_ptr<CompressedMapLoader> compressedMapLoader;
 	std::weak_ptr<MapSpriteLoader> mapSpriteLoader;
 
-public:
 
 	BackGroundMap(std::string fileLocation,
 		std::weak_ptr<CompressedMapLoader> compressedMapLoader,
@@ -68,11 +52,24 @@ public:
 
 	void GenerateBackGroundMap();
 	void CreateTileChunks();
-	//void CreateChunks(int x, int y);
-
 	void SeperateImageData();
+	void InitMeshInformation();
+
+
+
+public:
+
+	
+
+	static std::shared_ptr<BackGroundMap> Init(std::string fileLocation,
+		std::weak_ptr<CompressedMapLoader> compressedMapLoader,
+		std::weak_ptr<MapSpriteLoader> mapSpriteLoader);
 
 	void Display();
+
+	unsigned int getImageTilesSize();
+	unsigned int getImageTilesSize(int index);
+	unsigned char getImageTileData(int tileIndex, int RGBindex);
 
 	~BackGroundMap();
 };

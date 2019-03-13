@@ -41,8 +41,9 @@ void EngineCore::StartEngine()
 	compmap = std::make_shared<CompressedMapLoader>();
 
 	std::string FileLocation = "../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map";
-	map = std::make_shared<BackGroundMap>(FileLocation, compmap, spriteloads);
-	//BackGroundMap map(FileLocation, compmap, spriteloads);
+
+	map = BackGroundMap::Init(FileLocation, compmap, spriteloads);
+
 
 	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
 	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);

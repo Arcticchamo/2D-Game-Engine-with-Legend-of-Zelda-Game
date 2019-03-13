@@ -8,6 +8,7 @@ private:
 	GLuint m_id;
 
 public:
+
 	Texture(std::string);
 	Texture(GLuint textureID);
 	GLuint GetId();
