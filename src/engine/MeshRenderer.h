@@ -15,21 +15,18 @@ class VertexBuffer;
 class MeshRenderer : public Component
 {
 private:
-	GLuint m_id;
+	GLuint id;
 	
-	std::shared_ptr<Texture> m_texture;
-	std::shared_ptr<VertexBuffer> m_positions;
-	std::shared_ptr<VertexBuffer> m_texCoords;
-	std::shared_ptr<VertexArray> m_sprite;
+	std::shared_ptr<Texture> texture;
+	std::shared_ptr<VertexBuffer> positions;
+	std::shared_ptr<VertexBuffer> texCoords;
+	std::shared_ptr<VertexArray> sprite;
 public:
-	MeshRenderer();
-
 	void Start();
 	void StartNoTexture();
 
 	void Init();
 	void Update();
-	void Destroy();
 	
 	void Render();
 	void Render(std::shared_ptr<Texture> texture);

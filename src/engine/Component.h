@@ -11,16 +11,15 @@ class GameObject;
 class Component : public Object, public std::enable_shared_from_this<Component>
 {
 protected:
-	std::weak_ptr<GameObject> m_gameObject;
+	std::weak_ptr<GameObject> gameObject;
 	
 public:
 	virtual void Start() {};
 	virtual void Update() {};
-	virtual void Destroy() {};
 
 	void SetObject(std::weak_ptr<GameObject> _object)
 	{
-		m_gameObject = _object;
+		gameObject = _object;
 	}
 
 	virtual void Init() {};

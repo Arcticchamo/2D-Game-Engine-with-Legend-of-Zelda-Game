@@ -10,19 +10,17 @@ class MeshRenderer;
 class Player : public GameObject
 {
 private:
-	std::weak_ptr<MeshRenderer> m_meshRenderer;
+	std::weak_ptr<MeshRenderer> meshRenderer;
 	
-
 public:
-	Player();
-	Player(std::string);
-	~Player();
+	void Init(std::string filePath = "DEFAULT", std::string tag = "GameObject");
 
 	void Start();
 	void Update();
-	void Destroy();
 
-	void InputController(glm::vec3 &_pos, glm::vec3 &_rot, glm::vec3 &_scale);
+	void InputController(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale);
 
 	GLuint GetVAO();
+
+	~Player();
 };

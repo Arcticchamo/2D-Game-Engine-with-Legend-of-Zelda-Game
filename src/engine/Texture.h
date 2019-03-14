@@ -5,7 +5,7 @@
 class Texture
 {
 private:
-	GLuint m_id;
+	GLuint id;
 
 public:
 

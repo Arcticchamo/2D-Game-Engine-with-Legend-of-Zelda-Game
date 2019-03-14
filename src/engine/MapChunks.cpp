@@ -22,14 +22,11 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks,
 	position = glm::vec3(widthChunks * 512, heightChunks * 512, 0.0f);
 
 	int skip = mapWidth / tileWidth; //Gets the number of tiles along X 
-	int tracker = 0;
 
 	for (int y = 0; y < numberOfTilesInChunkY; y++)
 	{
 		for (int x = 0; x < numberOfTilesInChunkX; x++)
 		{
-			//int tileIndex = uncompressedData.at(y * skip + x);
-			//int tileIndex = uncompressedData.at(y * skip + x + (widthChunks * numberOfTilesInChunkX));
 			int tileRowSkip = y * skip + x;
 			int ChunkSkip = (heightChunks * skip * numberOfTilesInChunkY) + (widthChunks * numberOfTilesInChunkX);
 			int tileIndex = tileRowSkip + ChunkSkip;
@@ -40,11 +37,17 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks,
 			}
 		}
 	}
-
 	CreateTexture(rgbData);
+
+	rgbData.empty();
 }
 
-void MapChunks::AssignInformation(int tileWidth, int tileHeight, int tileIndex, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData)
+void MapChunks::AssignInformation(
+	int tileWidth, int tileHeight, 
+	int tileIndex, 
+	int tileX, int tileY, 
+	int numberOfTilesInChunksX, 
+	std::array <unsigned char, rgbDataSize> &rgbData)
 {
 	int index = 0;
 

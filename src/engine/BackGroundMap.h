@@ -59,8 +59,6 @@ private:
 
 public:
 
-	
-
 	static std::shared_ptr<BackGroundMap> Init(std::string fileLocation,
 		std::weak_ptr<CompressedMapLoader> compressedMapLoader,
 		std::weak_ptr<MapSpriteLoader> mapSpriteLoader);

@@ -10,26 +10,27 @@ private:
 	glm::vec3 scale;
 
 public:
-	Transform();
-	Transform(glm::vec3 _posisition, glm::vec3 _rotation, glm::vec3 _scale);
+	Transform(
+		glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f), 
+		glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f), 
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f));
+
 	~Transform();
 
-	void SetPosRotScale(glm::vec3 _posisition, glm::vec3 _rotation, glm::vec3 _scale);
+	void Position(glm::vec3 position);
+	glm::vec3 Position();
 
-	void SetPosition(glm::vec3 position) { this->position = position; }
-	void SetRotation(glm::vec3 rotation) { this->rotation = rotation; }
-	void SetScale(glm::vec3 scale) { this->scale = scale; }
+	void Rotation(glm::vec3 rotation);
+	glm::vec3 Rotation();
 
-	glm::vec3 GetPosition() { return position; }
-	glm::vec3 GetRotation() { return rotation; }
-	glm::vec3 GetScale() { return scale; }
-
-	void Translate(glm::vec3 position);
-	void Rotate(glm::vec3 rotation);
 	void Scale(glm::vec3 scale);
-	void UpdateModelMatrix();
+	glm::vec3 Scale();
 
-	
+	void TranslateObject(glm::vec3 position);
+	void RotateObject(glm::vec3 rotation);
+	void ScaleObject(glm::vec3 scale);
+
+	void UpdateModelMatrix();
 
 	void Update();
 };

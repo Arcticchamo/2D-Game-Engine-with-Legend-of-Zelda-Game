@@ -6,17 +6,17 @@
 class VertexBuffer
 {
 private:
-	GLuint m_id;
-	int m_components;
-	std::vector<GLfloat> m_data;
-	bool m_dirty;
+	GLuint id;
+	int components;
+	std::vector<GLfloat> data;
+	bool dirty;
 
 public:
 	VertexBuffer();
 
-	void add(glm::vec2);
-	void add(glm::vec3);
-	void add(glm::vec4);
+	void add(glm::vec2 data);
+	void add(glm::vec3 data);
+	void add(glm::vec4 data);
 	int getComponents();
 	int getDataSize();
 	GLuint getId();

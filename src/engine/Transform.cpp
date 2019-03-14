@@ -1,18 +1,11 @@
 #include "Transform.h"
 #include "Resources.h"
 
-Transform::Transform()
+Transform::Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	position = glm::vec3(0, 0, 0);
-	rotation = glm::vec3(0, 0, 0);
-	scale = glm::vec3(1, 1, 1);
-}
-
-Transform::Transform(glm::vec3 _posisition, glm::vec3 _rotation, glm::vec3 _scale)
-{
-	position = _posisition;
-	rotation = _rotation;
-	scale = _scale;
+	this->position = position;
+	this->rotation = rotation;
+	this->scale = scale;
 }
 
 Transform::~Transform()
@@ -20,26 +13,49 @@ Transform::~Transform()
 
 }
 
-void Transform::SetPosRotScale(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+void Transform::Position(glm::vec3 position)
 {
 	this->position = position;
+}
+
+glm::vec3 Transform::Position()
+{
+	return position;
+}
+
+void Transform::Rotation(glm::vec3 rotation)
+{
 	this->rotation = rotation;
+}
+
+glm::vec3 Transform::Rotation()
+{
+	return rotation;
+}
+
+void Transform::Scale(glm::vec3 scale)
+{
 	this->scale = scale;
 }
 
-void Transform::Translate(glm::vec3 _position)
+glm::vec3 Transform::Scale()
 {
-	position += _position;
+	return scale;
 }
 
-void Transform::Rotate(glm::vec3 _rotation)
+void Transform::TranslateObject(glm::vec3 position)
 {
-	rotation += _rotation;
+	this->position += position;
 }
 
-void Transform::Scale(glm::vec3 _scale)
+void Transform::RotateObject(glm::vec3 rotation)
 {
-	scale += _scale;
+	this->rotation += rotation;
+}
+
+void Transform::ScaleObject(glm::vec3 scale)
+{
+	this->scale += scale;
 }
 
 void Transform::UpdateModelMatrix()

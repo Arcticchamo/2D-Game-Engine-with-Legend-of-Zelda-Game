@@ -3,59 +3,61 @@
 
 VertexArray::VertexArray()
 {
-	m_dirty = false;
+	
+	
+	dirty = false;
 
-	m_buffers.resize(10);
+	buffers.resize(10);
 
-	glGenVertexArrays(1, &m_id);
+	glGenVertexArrays(1, &id);
 
-	if (!m_id)
+	if (!id)
 	{
 		throw std::exception();
 	}
 }
 
-void VertexArray::setBuffer(std::string _name, std::shared_ptr<VertexBuffer> _buffer)
+void VertexArray::setBuffer(std::string bufferName, std::shared_ptr<VertexBuffer> buffer)
 {
-	if (_name == "in_Position")
+	if (bufferName == "in_Position")
 	{
-		m_buffers.at(0) = _buffer;
+		buffers.at(0) = buffer;
 	}
-	else if (_name == "in_Color")
+	else if (bufferName == "in_Color")
 	{
-		m_buffers.at(1) = _buffer;
+		buffers.at(1) = buffer;
 	}
-	else if (_name == "in_TexCoord")
+	else if (bufferName == "in_TexCoord")
 	{
-		m_buffers.at(2) = _buffer;
+		buffers.at(2) = buffer;
 	}
 	else
 	{
 		throw std::exception();
 	}
 
-	m_dirty = true;
+	dirty = true;
 }
 
 int VertexArray::getVertexCount()
 {
-	if (!m_buffers.at(0))
+	if (!buffers.at(0))
 	{
 		throw std::exception();
 	}
 
-	return m_buffers.at(0)->getDataSize() / m_buffers.at(0)->getComponents();
+	return buffers.at(0)->getDataSize() / buffers.at(0)->getComponents();
 }
 
 GLuint VertexArray::getId()
 {
-	if (m_dirty)
+	if (dirty)
 	{
-		glBindVertexArray(m_id);
+		glBindVertexArray(id);
 
 		GLuint i = 0;
 
-		for (auto it = m_buffers.begin(); it != m_buffers.end(); it++)
+		for (auto it = buffers.begin(); it != buffers.end(); it++)
 		{
 			if (*it)
 			{
@@ -70,8 +72,8 @@ GLuint VertexArray::getId()
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
-		m_dirty = false;
+		dirty = false;
 	}
 
-	return m_id;
+	return id;
 }

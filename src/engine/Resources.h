@@ -10,7 +10,7 @@ class VertexArray;
 
 struct Sampler
 {
-	std::shared_ptr<Texture> m_texture;
+	std::shared_ptr<Texture> texture;
 	GLuint uniformId;
 };
 
@@ -21,26 +21,21 @@ private:
 	static std::vector<Sampler> samplers;
 
 public:
-	Resources();
-	~Resources();
 
-	static void Start();
-	static void Start(std::string, std::string);
+	static void Start(std::string vertShader = "../shaders/simple.vert", std::string fragShader = "../shaders/simple.frag");
 
-	static std::string ReadFile(std::string);
-	static GLuint GenerateVertexShader(const char*);
-	static GLuint GenerateFragmentShader(const char*);
-	static void CreateProgram(GLuint, GLuint);
+	static std::string ReadFile(std::string fileName);
+	static GLuint GenerateVertexShader(std::string &vertex);
+	static GLuint GenerateFragmentShader(std::string &fragment);
+	static void CreateProgram(GLuint vertexId, GLuint fragmentId);
 
-	static void Draw(VertexArray*);
+	static void Draw(std::weak_ptr<VertexArray> vertex);
 
-	static void SetUniform(std::string, int);
-	static void SetUniform(std::string, std::shared_ptr<Texture>);
-	static void SetUniform(std::string, float);
-	static void SetUniform(std::string, glm::vec4);
-	static void SetUniform(std::string, glm::mat4);
-
-
+	static void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);
+	static void SetUniform(std::string uniform, int value);
+	static void SetUniform(std::string uniform, float value);
+	static void SetUniform(std::string uniform, glm::vec4 value);
+	static void SetUniform(std::string uniform, glm::mat4 value);
 
 	static GLuint GetProgram();
 };

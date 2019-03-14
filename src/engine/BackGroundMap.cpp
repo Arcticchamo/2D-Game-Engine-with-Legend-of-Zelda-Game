@@ -20,7 +20,6 @@ BackGroundMap::BackGroundMap(std::string fileLocation,
 	std::weak_ptr<MapSpriteLoader> mapSpriteLoader)
 {
 	this->fileLocation = fileLocation;
-	
 	this->compressedMapLoader = compressedMapLoader;
 	this->mapSpriteLoader = mapSpriteLoader;
 }
@@ -50,7 +49,7 @@ void BackGroundMap::CreateTileChunks()
 	//Calculate how many chunks is needed for the map
 	//If the map does not divide by 512, go to the next whole number
 	//This "black space" will be calculated later
-	int widthChunks = (int)std::ceil(mapWidth / 512);
+	int widthChunks = ((float)mapWidth / 512.0f) + 0.5f;
 	int heightChunks = ((float)mapHeight / 512.0f) + 0.5f;
 
 	chunks.reserve(widthChunks * heightChunks);
@@ -67,7 +66,9 @@ void BackGroundMap::CreateTileChunks()
 		}
 	}
 
-	//Wipe the vectors and arrays of information
+	imageTiles.clear();
+	imageData.clear();
+	unCompressedData.clear();
 }
 
 void BackGroundMap::SeperateImageData()
@@ -133,4 +134,3 @@ unsigned char BackGroundMap::getImageTileData(int tileIndex, int RGBindex)
 BackGroundMap::~BackGroundMap()
 {
 }
-

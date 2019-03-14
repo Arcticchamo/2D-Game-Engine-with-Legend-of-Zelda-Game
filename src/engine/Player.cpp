@@ -1,70 +1,80 @@
+#include "Camera.h"
+#include "EngineCore.h"
 #include "Player.h"
 #include "MeshRenderer.h"
 #include "Resources.h"
 
 #include <SDL2/SDL.h>
 
-
-Player::Player()
-{}
-
-Player::Player(std::string _textureFilePath)
+void Player::Init(std::string filePath, std::string tag)
 {
-	m_textureFilePath = _textureFilePath;
+	this->transform = AddComponent<Transform>();
+	this->textureFilePath = filePath;
+	this->tag = tag;
+	Start();
 }
-
-Player::~Player()
-{}
 
 void Player::Start()
 {
-	m_meshRenderer = AddComponent<MeshRenderer>();
-	m_transform = AddComponent<Transform>();
+	meshRenderer = AddComponent<MeshRenderer>();
+	//transform = AddComponent<Transform>();
 
-	m_meshRenderer.lock()->Start();
-	m_transform.lock()->Start();
+	meshRenderer.lock()->Start();
+	transform.lock()->Start();
 
+	transform.lock()->TranslateObject(glm::vec3((640 / 2), (480 / 2), 0.0f));
+	transform.lock()->RotateObject(glm::vec3(0));
+	transform.lock()->ScaleObject(glm::vec3(10, 10, 1));
 	
-	m_transform.lock()->Translate(glm::vec3((640 / 2), (480 / 2), 0.0f));
-	m_transform.lock()->Rotate(glm::vec3(0));
-	m_transform.lock()->Scale(glm::vec3(100, 100, 1));
-	
+	transform.lock()->UpdateModelMatrix();
 
-	m_transform.lock()->UpdateModelMatrix();
+
 }
+
+/*std::vector<std::shared_ptr<Camera> >::iterator it;
+	for (it = cameraList.begin(); it != cameraList.end(); it++)
+	{
+		if ((*it)->getCameraType() == CAMERA_TYPE::MAIN_CAMERA)
+		{
+			return (*it);
+		}
+	}
+	return NULL;*/
 
 void Player::Update()
 {
 	//REPLACE WITH ITERATORS
-	for (size_t i = 0; i < m_components.size(); i++)
+	for (size_t i = 0; i < components.size(); i++)
 	{
-		m_components.at(i)->Update();
+		components.at(i)->Update();
 	}
 
 	glm::vec3 position(0);
 	glm::vec3 rotation(0);
-	glm::vec3 scale(0);
+	glm::vec3 scale(1.0f);
 
 	InputController(position, rotation, scale);
 
-	m_transform.lock()->Translate(position);
-	m_transform.lock()->Rotate(rotation);
-	m_transform.lock()->Scale(scale);
+	transform.lock()->TranslateObject(position);
+	transform.lock()->RotateObject(rotation);
+	transform.lock()->ScaleObject(scale);
 	
-	
-	m_transform.lock()->UpdateModelMatrix();
+	transform.lock()->UpdateModelMatrix();
 
-	m_meshRenderer.lock()->Render();
+	meshRenderer.lock()->Render();
+	
+	Resources::SetUniform("in_ProjectionMat", engineCore.lock()->GetMainCamera()->GetComponent<Camera>()->GetProjectionMatrix());
+	Resources::SetUniform("in_ViewMat", glm::inverse(engineCore.lock()->GetMainCamera()->GetComponent<Camera>()->GetViewMatrix()));
 }
 
-void Player::InputController(glm::vec3 & _pos, glm::vec3 & _rot, glm::vec3 & _scale)
+void Player::InputController(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale)
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 
-	if (state[SDL_SCANCODE_UP]) _pos.y -= 10.0f;
-	if (state[SDL_SCANCODE_DOWN]) _pos.y += 10.0f;
-	if (state[SDL_SCANCODE_LEFT]) _pos.x -= 10.0f;
-	if (state[SDL_SCANCODE_RIGHT]) _pos.x += 10.0f;
+	if (state[SDL_SCANCODE_UP]) position.y -= 10.0f;
+	if (state[SDL_SCANCODE_DOWN]) position.y += 10.0f;
+	if (state[SDL_SCANCODE_LEFT]) position.x -= 10.0f;
+	if (state[SDL_SCANCODE_RIGHT]) position.x += 10.0f;
 
 	//if (state[SDL_SCANCODE_W]) _pos.y -= 10.0f;
 	//if (state[SDL_SCANCODE_S]) _pos.y += 10.0f;
@@ -78,12 +88,12 @@ void Player::InputController(glm::vec3 & _pos, glm::vec3 & _rot, glm::vec3 & _sc
 	//if (state[SDL_SCANCODE_M]) _scale -= 0.5f;
 }
 
-void Player::Destroy()
-{
-}
-
 GLuint Player::GetVAO()
 {
-	return m_meshRenderer.lock()->GetID();
+	return meshRenderer.lock()->GetID();
 }
+
+Player::~Player()
+{}
+
 

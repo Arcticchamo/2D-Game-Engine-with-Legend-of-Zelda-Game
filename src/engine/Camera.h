@@ -1,3 +1,5 @@
+#include "GameObject.h"
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,29 +9,40 @@
 
 enum CAMERA_TYPE {MAIN_CAMERA, CAMERA};
 
-class Camera
+
+class Camera : public GameObject
 {
 private:
-	CAMERA_TYPE m_cameraType;
+	CAMERA_TYPE cameraType;
 
-	glm::mat4 m_viewingMatrix;
-	glm::mat4 m_projectionMatrix;
-	
-	glm::vec3 m_position;
+	std::string name;
 
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale;
 public:
-	Camera();
-	Camera(CAMERA_TYPE);
+	void Init(CAMERA_TYPE cameraType, std::string tag = "GameObject");
+	
 	~Camera();
 
-	glm::mat4 GetViewMatrix() { return m_viewingMatrix; }
-	glm::mat4 GetProjectionMatrix() { return m_projectionMatrix; }
+	void CreateCamera(std::string cameraName = "Camera",
+		glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f));
 
-	void CreateCamera(std::string, int, int);
-	void TranslateViewMatrix(glm::vec3);
-	void UpdateCamera(int _screenWidth, int _screenHeight);
+	glm::vec3 Position();
+	void Position(glm::vec3 position);
+	glm::vec3 Rotation();
+	void Rotation(glm::vec3 rotation);
+	glm::vec3 Scale();
+	void Scale(glm::vec3 scale);
+
+	void Update();
 
 	void TemporaryMove();
 
-	CAMERA_TYPE getCameraType() { return m_cameraType; }
+	glm::mat4 GetViewMatrix();
+	glm::mat4 GetProjectionMatrix();
+
+	CAMERA_TYPE getCameraType() { return cameraType; }
 };

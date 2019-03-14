@@ -2,13 +2,24 @@
 
 #include "BackGroundMap.h"
 #include "Camera.h"
+#include "CompressedMapLoader.h"
+#include "MapSpriteLoader.h"
 #include "Player.h"
 #include "Resources.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 
-#include "MapSpriteLoader.h"
-#include "CompressedMapLoader.h"
+std::shared_ptr<EngineCore> EngineCore::Init()
+{
+	std::shared_ptr<EngineCore> engine = std::make_shared<EngineCore>();
+	engine->self = engine;
+
+	engine->StartEngine();
+	engine->UpdateEngine();
+	engine->DestroyEngine();
+
+	return engine;
+}
 
 void EngineCore::StartEngine()
 {
@@ -17,11 +28,11 @@ void EngineCore::StartEngine()
 		throw std::exception();
 	}
 
-	m_window = SDL_CreateWindow("Triangle",
+	window = SDL_CreateWindow("Legend Of Zelda",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-	if (!SDL_GL_CreateContext(m_window))
+	if (!SDL_GL_CreateContext(window))
 	{
 		throw std::exception();
 	}
@@ -31,27 +42,25 @@ void EngineCore::StartEngine()
 		throw std::exception();
 	}
 
+	//Generate the shaders
 	Resources::Start("../shaders/simple.vert", "../shaders/simple.frag");
-	m_player = std::make_shared<Player>("../Link.png");
-	m_player->Start();
 
-	std::shared_ptr<MapSpriteLoader> spriteloads;
-	spriteloads = std::make_shared<MapSpriteLoader>();
-	std::shared_ptr<CompressedMapLoader> compmap;
-	compmap = std::make_shared<CompressedMapLoader>();
-
-	std::string FileLocation = "../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map";
-
-	map = BackGroundMap::Init(FileLocation, compmap, spriteloads);
+	std::shared_ptr<Player> player = AddGameObject<Player>("../Link.png", "Player");
 
 
-	std::shared_ptr<Camera> main_camera = std::make_shared<Camera>(CAMERA_TYPE::MAIN_CAMERA);
-	main_camera->CreateCamera("Main Camera", SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_cameraList.push_back(main_camera);
+	//Setup the map loading classes 
+	spriteLoader = std::make_shared<MapSpriteLoader>();
+	compressedMapLoader = std::make_shared<CompressedMapLoader>();
+	map = BackGroundMap::Init(
+		"../SpriteSheets/Zelda_World_Map/Zelda_Overworld_Map", 
+		compressedMapLoader, 
+		spriteLoader);
+
+	std::shared_ptr<Camera> camera = AddGameObject<Camera>(CAMERA_TYPE::MAIN_CAMERA, "Camera");
+	camera->CreateCamera("Main Camera");
 
 	//glEnable(GL_CULL_FACE);
 	//glEnable(GL_DEPTH_TEST);
-	
 }
 
 void EngineCore::UpdateEngine()
@@ -75,43 +84,40 @@ void EngineCore::UpdateEngine()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int w = 0, h = 0;
-		SDL_GetWindowSize(m_window, &w, &h);
+		SDL_GetWindowSize(window, &w, &h);
 		glViewport(0, 0, w, h);
-
-		for (size_t i = 0; i < m_cameraList.size(); i++)
-		{
-			m_cameraList.at(i)->UpdateCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-		}
-
-		Resources::SetUniform("in_ViewMat", glm::inverse(GetMainCamera()->GetViewMatrix()));
-		Resources::SetUniform("in_ProjectionMat", GetMainCamera()->GetProjectionMatrix());
-
-		m_player->Update();
 
 		map->Display();
 
+
+		for (size_t i = 0; i < gameObjectList.size(); i++)
+		{
+			gameObjectList.at(i)->Update();
+		}
+
 		angle++;
-		SDL_GL_SwapWindow(m_window);
+		SDL_GL_SwapWindow(window);
 	}
 }
 
 void EngineCore::DestroyEngine()
 {
-	SDL_DestroyWindow(m_window);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
-
-std::shared_ptr<Camera> EngineCore::GetMainCamera()
+std::shared_ptr<GameObject> EngineCore::GetMainCamera()
 {
-	std::vector<std::shared_ptr<Camera> >::iterator it;
-
-	for (it = m_cameraList.begin(); it != m_cameraList.end(); it++)
+	std::vector<std::shared_ptr<GameObject> >::iterator it;
+	for (it = gameObjectList.begin(); it != gameObjectList.end(); it++)
 	{
-		if ((*it)->getCameraType() == CAMERA_TYPE::MAIN_CAMERA)
+		if ((*it)->GetTag() == "Camera")
 		{
-			return (*it);
-		}
+			if ((*it)->GetComponent<Camera>()->getCameraType() == CAMERA_TYPE::MAIN_CAMERA)
+			{
+				return (*it);
+			}
+		}	
 	}
 	return NULL;
 }

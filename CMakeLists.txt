@@ -21,6 +21,14 @@ if(MSVC)
   add_definitions(-DSDL_MAIN_HANDLED)
 endif()
 
+add_library(miniz
+contrib/stb_image/stb_image.cpp
+contrib/miniz/miniz.c
+contrib/miniz/miniz_tinfl.c
+contrib/miniz/miniz_tdef.c
+contrib/miniz/miniz_zip.c
+)
+
 add_executable(LoZ
 
 src/engine/BackGroundMap.h
@@ -54,11 +62,6 @@ src/engine/Texture.cpp
 src/engine/Transform.cpp
 src/engine/VertexArray.cpp
 src/engine/VertexBuffer.cpp 
-
-contrib/stb_image/stb_image.cpp
-contrib/miniz/miniz.c
-contrib/miniz/miniz_tinfl.c
-contrib/miniz/miniz_tdef.c
 )
 
 add_executable(MapGenerator
@@ -68,20 +71,19 @@ src/mapgenerator/GenerateTileMap.cpp
 
 src/mapgenerator/GenerateTileMap.h
 
-contrib/stb_image/stb_image.cpp
-contrib/miniz/miniz_zip.c
-contrib/miniz/miniz.c
-contrib/miniz/miniz_tinfl.c
-contrib/miniz/miniz_tdef.c
+
+)
+target_link_libraries(MapGenerator
+miniz
 )
 
 if(MSVC)
   target_link_libraries(LoZ
-    SDL2 glew32 opengl32
+    SDL2 glew32 opengl32 miniz
   )
 else()
   target_link_libraries(LoZ
-    SDL2 GLU GLEW GL
+    SDL2 GLU GLEW GL miniz
   )
 endif()
 

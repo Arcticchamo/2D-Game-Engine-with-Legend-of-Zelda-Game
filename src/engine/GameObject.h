@@ -2,6 +2,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+
 #include "Object.h"
 #include "Transform.h"
 
@@ -11,47 +12,45 @@
 #include <vector>
 
 class Component;
-
+class EngineCore;
 
 class GameObject : public Object, public std::enable_shared_from_this<GameObject>
 {
+	friend EngineCore;
+
 protected:
 	
-	std::string m_name;
-	std::string m_textureFilePath;
+	std::string name;
+	std::string textureFilePath;
 
-	std::vector<std::shared_ptr<Component> > m_components;
-	std::weak_ptr<Transform> m_transform;
+	std::string tag;
+
+	std::vector<std::shared_ptr<Component> > components;
+	std::weak_ptr<EngineCore> engineCore;
+	std::weak_ptr<Transform> transform;
 
 public:
 
-	GameObject() {}
-
-	GameObject(std::string _texFileLoc)
-	{
-		m_textureFilePath = _texFileLoc;
-	}
+	GameObject(){}
 
 	virtual void Start() {};
 	virtual void Update() {};
-	virtual void Destroy() {};
 
 	std::weak_ptr<Transform> GetTransform()
 	{
 		return std::weak_ptr<Transform>();
 	}
-
 	std::string GetTextureFilePath()
 	{
-		return m_textureFilePath;
+		return textureFilePath;
 	}
-
+	std::string GetTag() { return tag; }
 
 	template <class CompType>
 	std::shared_ptr<CompType> AddComponent()
 	{
 		std::shared_ptr<CompType> Temp = std::make_shared<CompType>();
-		m_components.push_back(Temp);
+		components.push_back(Temp);
 		//shared_from_this();
 		Temp->SetObject(shared_from_this());
 		Temp->Init();
@@ -61,16 +60,16 @@ public:
 	template <class CompType>
 	std::shared_ptr<CompType> GetComponent()
 	{
-		for (size_t i = 0; i < m_components.size(); i++)
+		for (size_t i = 0; i < components.size(); i++)
 		{
-			std::shared_ptr<CompType> c = std::dynamic_pointer_cast<CompType>(m_components.at(i));
+			std::shared_ptr<CompType> c = std::dynamic_pointer_cast<CompType>(components.at(i));
 
 			if (c)
 			{
 				return c;
 			}
 		}
-		return std::shared_ptr<CompType>(); //throw
+		return std::shared_ptr<CompType>(); 
 	}
 
 	virtual ~GameObject() {};
