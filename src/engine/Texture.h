@@ -1,15 +1,18 @@
-#include <GL/glew.h>
-#include <iostream>
-#include <stb_image/stb_image.h>
+#include "Resource.h"
 
-class Texture
+#include <GL/glew.h>
+#include <memory>
+#include <stb_image/stb_image.h>
+#include <string>
+
+class Texture : public Resource
 {
 private:
 	GLuint id;
-
+	void Load(std::string path);
 public:
-
-	Texture(std::string);
-	Texture(GLuint textureID);
+	Texture();
+	static std::shared_ptr<Texture> Init(std::string path);
 	GLuint GetId();
+	~Texture();
 };

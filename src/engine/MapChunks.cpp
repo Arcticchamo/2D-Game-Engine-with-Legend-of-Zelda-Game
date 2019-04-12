@@ -29,7 +29,7 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks,
 		{
 			int tileRowSkip = y * skip + x;
 			int ChunkSkip = (heightChunks * skip * numberOfTilesInChunkY) + (widthChunks * numberOfTilesInChunkX);
-			int tileIndex = tileRowSkip + ChunkSkip;
+			size_t tileIndex = tileRowSkip + ChunkSkip;
 			if (tileIndex < uncompressedData.size())
 			{
 				tileIndex = uncompressedData.at(tileIndex);
@@ -86,5 +86,5 @@ void MapChunks::CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	texture = std::make_shared<Texture>(textureID);
+	//texture = std::make_shared<Texture>(textureID);
 }

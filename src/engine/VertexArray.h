@@ -10,11 +10,8 @@ private:
 	GLuint id;
 	std::vector<std::shared_ptr<VertexBuffer> > buffers;
 	bool dirty;
-
 public:
-
 	VertexArray();
-	
 	void setBuffer(std::string bufferName, std::shared_ptr<VertexBuffer> buffer);
 	int getVertexCount();
 	GLuint getId();

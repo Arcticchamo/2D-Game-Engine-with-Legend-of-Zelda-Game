@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 
+//TODO: COMMENT AND REWORK
+
 //Class designed to take a compressed map sprite sheet 
 //text file and uncompress it
 class CompressedMapLoader

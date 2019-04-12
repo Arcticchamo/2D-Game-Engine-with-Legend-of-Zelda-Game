@@ -3,18 +3,35 @@
 
 VertexArray::VertexArray()
 {
-	
-	
 	dirty = false;
-
 	buffers.resize(10);
-
 	glGenVertexArrays(1, &id);
-
 	if (!id)
 	{
 		throw std::exception();
 	}
+
+	std::shared_ptr<VertexBuffer> positions = std::make_shared<VertexBuffer>();
+	std::shared_ptr<VertexBuffer> texCoords = std::make_shared<VertexBuffer>();
+
+	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
+	positions->add(glm::vec3(0.0f, 10.0f, 0.0f));
+	positions->add(glm::vec3(10.0f, 10.0f, 0.0f));
+
+	positions->add(glm::vec3(10.0f, 10.0f, 0.0f));
+	positions->add(glm::vec3(10.0f, 0.0f, 0.0f));
+	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	texCoords->add(glm::vec2(0.0f, 0.0f));
+	texCoords->add(glm::vec2(0.0f, 1.0f));
+	texCoords->add(glm::vec2(1.0f, 1.0f));
+
+	texCoords->add(glm::vec2(1.0f, 1.0f));
+	texCoords->add(glm::vec2(1.0f, 0.0f));
+	texCoords->add(glm::vec2(0.0f, 0.0f));
+
+	setBuffer("in_Position", positions);
+	setBuffer("in_TexCoord", texCoords);
 }
 
 void VertexArray::setBuffer(std::string bufferName, std::shared_ptr<VertexBuffer> buffer)

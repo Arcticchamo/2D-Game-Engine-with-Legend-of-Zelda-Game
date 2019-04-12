@@ -1,48 +1,30 @@
-#include "GameObject.h"
+#include "Component.h"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
+class Transform;
 enum CAMERA_TYPE {MAIN_CAMERA, CAMERA};
 
 
-class Camera : public GameObject
+class Camera : public Component
 {
 private:
+	//Tracks the independant camera types (TODO: Currently Depricated, could be used later)
 	CAMERA_TYPE cameraType;
-
-	std::string name;
-
-	glm::vec3 position;
-	glm::vec3 rotation;
-	glm::vec3 scale;
+	std::shared_ptr<Transform> transform;
 public:
-	void Init(CAMERA_TYPE cameraType, std::string tag = "GameObject");
-	
-	~Camera();
-
-	void CreateCamera(std::string cameraName = "Camera",
-		glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glm::vec3 Position();
-	void Position(glm::vec3 position);
-	glm::vec3 Rotation();
-	void Rotation(glm::vec3 rotation);
-	glm::vec3 Scale();
-	void Scale(glm::vec3 scale);
-
-	void Update();
-
-	void TemporaryMove();
-
+	//Initialize the Camera Component with predetermined values
+	void Init();
+	void Init(CAMERA_TYPE cameraType);
+	//Returns the view Matrix, Only the camera needs to handle this
 	glm::mat4 GetViewMatrix();
-	glm::mat4 GetProjectionMatrix();
-
+	//Currently not required (TODO: Currenly Depricated, could be used later)
 	CAMERA_TYPE getCameraType() { return cameraType; }
+	~Camera();
 };

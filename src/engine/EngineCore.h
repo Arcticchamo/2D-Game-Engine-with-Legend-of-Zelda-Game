@@ -1,79 +1,83 @@
+#include "GameObject.h"
+
 #include <exception>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 #include <memory>
-#include <SDL2/SDL.h>
 #include <vector>
 
-#include "GameObject.h"
-
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-
-class BackGroundMap;
 class Camera;
-class CompressedMapLoader;
-class MapSpriteLoader;
-class Player;
-class ShaderProgram;
-class VertexArray;
-class VertexBuffer;
+class Resources;
+class Screen;
+class GameObject;
 
 class EngineCore
 {
 private:
-	SDL_Window *window;
-
-	std::vector < std::shared_ptr<GameObject> > gameObjectList;
-	//std::vector < std::shared_ptr<Camera> > cameraList;
-
+	//List of every GameObject in the main Scene
+	std::vector<std::shared_ptr<GameObject> > gameObjectList;
+	//A reference to each camera in the scene
+	std::vector<std::weak_ptr<GameObject> > cameraList;
+	//A reference to itself. Used for setting GameObject references
 	std::weak_ptr<EngineCore> self;
-	std::shared_ptr<Player> player;
-	std::shared_ptr<BackGroundMap> map;
+	//Current Camera references the current camera being rendered in the scene
+	std::weak_ptr<GameObject> currentCamera;
+	std::shared_ptr<Resources> resources;
+	std::shared_ptr<Screen> screen;
 
-	std::shared_ptr<MapSpriteLoader> spriteLoader;
-	std::shared_ptr<CompressedMapLoader> compressedMapLoader;
+	//std::shared_ptr<MapSpriteLoader> spriteLoader; //TODO: CHANGE THEIR NAMES TO BE MORE ACCURATE
+	//std::shared_ptr<CompressedMapLoader> compressedMapLoader;
+	//Called when Engine is started. Loads any prerequisites
+	void InitialiseEngine();
 public:
+	friend class Camera; //Linked so there is access to the CameraList Vector
 
+	//Accessed inside of main(), returning a reference to the engine
 	static std::shared_ptr<EngineCore> Init();
-	void StartEngine();
+	//Called Every Frame - Main GameLoop stored in this function
 	void UpdateEngine();
+	//Anything that needs to happen when the engine is closing. Currently Depricated TODO: SEE IF NEEDED
 	void DestroyEngine();
 
-	int GetScreenWidth() { return SCREEN_WIDTH; }
-	int GetScreenHeight() { return SCREEN_HEIGHT; }
+	//Getters Designed for obtaining key classes within the engine
+	std::shared_ptr<GameObject> GetCurrentCamera();
+	std::shared_ptr<Resources> GetResources();
+	std::shared_ptr<Screen> GetScreen();
 
-	std::shared_ptr<GameObject> GetMainCamera();
+	//AddGameobject functions and templates designed for different situations.
+	//It creates a GameObject, then adds any components passed in (such as Player)
+	std::shared_ptr<GameObject> AddGameObject();
 
 	template <class goType>
-	std::shared_ptr<goType> AddGameObject()
+	std::shared_ptr<GameObject> AddGameObject()
 	{
-		std::shared_ptr<goType> gameObject = std::make_shared<goType>();
-		gameObject->engineCore = self.lock();
-		gameObjectList.push_back(gameObject);
-		gameObject->Init();
-		return gameObject;
+		std::shared_ptr<GameObject> go = AddGameObject();
+		go->AddComponent<goType>();
+		return go;
 	}
 
 	template <class goType, class A>
-	std::shared_ptr<goType> AddGameObject(A a)
+	std::shared_ptr<GameObject> AddGameObject(A a)
 	{
-		std::shared_ptr<goType> gameObject = std::make_shared<goType>();
-		gameObject->engineCore = self.lock();
-		gameObjectList.push_back(gameObject);
-		gameObject->Init(a);
-		return gameObject;
+		std::shared_ptr<GameObject> go = AddGameObject();
+		go->AddComponent<goType>(a);
+		return go;
 	}
 
 	template <class goType, class A, class B>
-	std::shared_ptr<goType> AddGameObject(A a, B b)
+	std::shared_ptr<GameObject> AddGameObject(A a, B b)
 	{
-		std::shared_ptr<goType> gameObject = std::make_shared<goType>();
-		gameObject->engineCore = self.lock();
-		gameObjectList.push_back(gameObject);
-		gameObject->Init(a, b);
-		return gameObject;
+		std::shared_ptr<GameObject> go = AddGameObject();
+		go->AddComponent<goType>(a, b);
+		return go;
 	}
 
+	template <class goType, class A, class B, class C>
+	std::shared_ptr<GameObject> AddGameObject(A a, B b, C c)
+	{
+		std::shared_ptr<GameObject> go = AddGameObject();
+		go->AddComponent<goType>(a, b, c);
+		return go;
+	}
 };

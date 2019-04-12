@@ -10,6 +10,13 @@
 
 #include <math.h>
 
+/*
+WORK IN PROGRESS
+COMMENT
+TODO: TURN THIS INTO A COMPONENT!
+GET IT TO WORK AUTOMATICALLY.
+*/
+
 class CompressedMapLoader;
 class MapChunks;
 class MapSpriteLoader;
@@ -54,8 +61,6 @@ private:
 	void CreateTileChunks();
 	void SeperateImageData();
 	void InitMeshInformation();
-
-
 
 public:
 

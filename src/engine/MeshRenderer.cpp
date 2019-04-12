@@ -1,66 +1,17 @@
+#include "Camera.h"
 #include "GameObject.h"
+#include "Material.h"
+#include "Mesh.h"
 #include "MeshRenderer.h"
 #include "Resources.h"
-#include "VertexArray.h"
-#include "VertexBuffer.h"
+#include "Screen.h"
+#include "Shader.h"
+#include "Transform.h"
 
-void MeshRenderer::Init()
-{}
-
-void MeshRenderer::Start()
+void MeshRenderer::Init(std::string path)
 {
-	positions = std::make_shared<VertexBuffer>();
-	texCoords = std::make_shared<VertexBuffer>();
-
-	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
-	positions->add(glm::vec3(0.0f, 1.0f, 0.0f));
-	positions->add(glm::vec3(1.0f, 1.0f, 0.0f));
-
-	positions->add(glm::vec3(1.0f, 1.0f, 0.0f));
-	positions->add(glm::vec3(1.0f, 0.0f, 0.0f));
-	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
-
-	texCoords->add(glm::vec2(0.0f, 0.0f));
-	texCoords->add(glm::vec2(0.0f, 1.0f));
-	texCoords->add(glm::vec2(1.0f, 1.0f));
-
-	texCoords->add(glm::vec2(1.0f, 1.0f));
-	texCoords->add(glm::vec2(1.0f, 0.0f));
-	texCoords->add(glm::vec2(0.0f, 0.0f));
-
-	sprite = std::make_shared<VertexArray>();
-
-	sprite->setBuffer("in_Position", positions);
-	sprite->setBuffer("in_TexCoord", texCoords);
-
-	texture = std::make_shared<Texture>(gameObject.lock()->GetTextureFilePath());
-}
-
-void MeshRenderer::StartNoTexture()
-{
-	positions = std::make_shared<VertexBuffer>();
-	texCoords = std::make_shared<VertexBuffer>();
-
-	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
-	positions->add(glm::vec3(0.0f, 1.0f, 0.0f));
-	positions->add(glm::vec3(1.0f, 1.0f, 0.0f));
-
-	positions->add(glm::vec3(1.0f, 1.0f, 0.0f));
-	positions->add(glm::vec3(1.0f, 0.0f, 0.0f));
-	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
-
-	texCoords->add(glm::vec2(0.0f, 0.0f));
-	texCoords->add(glm::vec2(0.0f, 1.0f));
-	texCoords->add(glm::vec2(1.0f, 1.0f));
-
-	texCoords->add(glm::vec2(1.0f, 1.0f));
-	texCoords->add(glm::vec2(1.0f, 0.0f));
-	texCoords->add(glm::vec2(0.0f, 0.0f));
-
-	sprite = std::make_shared<VertexArray>();
-
-	sprite->setBuffer("in_Position", positions);
-	sprite->setBuffer("in_TexCoord", texCoords);
+	mesh = GetResources()->Load<Mesh>(path);
+	material = std::make_shared<Material>();
 }
 
 void MeshRenderer::Update()
@@ -70,19 +21,33 @@ void MeshRenderer::Update()
 
 void MeshRenderer::Render()
 {
-	Resources::SetUniform("in_Texture", texture);
-	Resources::Draw(sprite);
+	material->GetShader()->SetUniform("in_ProjectionMat", GetScreen()->GetProjectionMatrix());
+	material->GetShader()->SetUniform("in_ViewMat", GetCurrentCamera()->GetComponent<Camera>()->GetViewMatrix());
+	material->GetShader()->SetUniform("in_ModelMat", gameObject.lock()->GetComponent<Transform>()->GetModelMatrix());
+
+	material->Apply();
+	glUseProgram(material->GetShader()->GetId());
+	glBindVertexArray(mesh.lock()->GetId());
+	glDrawArrays(GL_TRIANGLES, 0, mesh.lock()->GetTriangleCount());
+	material->Remove();
+
+	glBindVertexArray(0);
+	glUseProgram(0);
 }
 
-void MeshRenderer::Render(std::shared_ptr<Texture> texture)
+void MeshRenderer::SetMesh(std::weak_ptr<Mesh> mesh)
 {
-	Resources::SetUniform("in_Texture", texture);
-	Resources::Draw(sprite);
+	this->mesh = mesh;
 }
 
-GLuint MeshRenderer::GetID()
+std::weak_ptr<Mesh> MeshRenderer::GetMesh()
 {
-	return id;
+	return mesh;
+}
+
+std::shared_ptr<Material> MeshRenderer::GetMaterial()
+{
+	return material;
 }
 
 MeshRenderer::~MeshRenderer()
