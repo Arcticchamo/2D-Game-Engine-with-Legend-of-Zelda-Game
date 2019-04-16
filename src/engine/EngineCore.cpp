@@ -74,6 +74,8 @@ void EngineCore::UpdateEngine()
 void EngineCore::DestroyEngine()
 {}
 
+//Returns the resources smart ptr 
+//throws an exception if an error occurs
 std::shared_ptr<Resources> EngineCore::GetResources()
 {
 	try
@@ -86,6 +88,8 @@ std::shared_ptr<Resources> EngineCore::GetResources()
 	}
 }
 
+//Returns the screen smart ptr 
+//throws an exception if an error occurs
 std::shared_ptr<Screen> EngineCore::GetScreen()
 {
 	try
@@ -98,6 +102,7 @@ std::shared_ptr<Screen> EngineCore::GetScreen()
 	}
 }
 
+//Returns the current camera
 std::shared_ptr<GameObject> EngineCore::GetCurrentCamera()
 {
 	try
@@ -110,6 +115,7 @@ std::shared_ptr<GameObject> EngineCore::GetCurrentCamera()
 	}
 }
 
+//Creates a new GameObject, assigns parameters and pushes it into the GameObjectList vector
 std::shared_ptr<GameObject> EngineCore::AddGameObject()
 {
 	std::shared_ptr<GameObject> go = std::make_shared<GameObject>();

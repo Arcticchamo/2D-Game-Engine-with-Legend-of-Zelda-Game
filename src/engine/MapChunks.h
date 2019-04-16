@@ -7,6 +7,8 @@
 class BackGroundMap;
 class Texture;
 
+//TODO: UPDATE THIS 
+
 class MapChunks
 {
 private:

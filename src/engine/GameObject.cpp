@@ -11,9 +11,10 @@
 
 void GameObject::Init()
 {
-	transform = AddComponent<Transform>();
+	//TODO: transform = AddComponent<Transform>();
 }
 
+//Get and set the name and tag variables
 std::string GameObject::GetTag()
 {
 	return tag;
@@ -34,6 +35,8 @@ void GameObject::SetName(std::string name)
 	this->name = name;
 }
 
+//Iterate through each component and call their Update Functions
+//Catch any errors that occur
 void GameObject::Update()
 {
 	for (std::vector<std::shared_ptr<Component>>::iterator it = components.begin(); it != components.end(); it++)
@@ -49,6 +52,8 @@ void GameObject::Update()
 	}
 }
 
+//Iterate through each component and call their Render Functions
+//Catch any errors that occur
 void GameObject::Render()
 {
 	for (std::vector<std::shared_ptr<Component>>::iterator it = components.begin(); it != components.end(); it++)
