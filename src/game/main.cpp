@@ -20,4 +20,5 @@ void CreateGameObjects(std::shared_ptr<EngineCore> engine)
 {
 	std::shared_ptr<GameObject> main_camera = engine->AddGameObject<Camera>();
 	std::shared_ptr<GameObject> player = engine->AddGameObject<Player>();
+	std::shared_ptr<GameObject> bgm = engine->AddGameObject<BackGroundMap>("../Resources/Maps/Zelda_World_Map/Zelda_World_Map");
 }

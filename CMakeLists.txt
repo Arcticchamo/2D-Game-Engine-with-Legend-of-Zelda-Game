@@ -35,8 +35,8 @@ add_library(Engine
 src/engine/BackGroundMap.h
 src/engine/Camera.h
 src/engine/Component.h
-src/engine/CompressedMapLoader.h
-src/engine/CompressedSpriteLoader.h
+src/engine/CompressedMapSpriteLoader.h
+src/engine/CompressedMapTextLoader.h
 src/engine/engine.h
 src/engine/EngineCore.h
 src/engine/GameObject.h
@@ -57,8 +57,8 @@ src/engine/VertexBuffer.h
 src/engine/BackGroundMap.cpp
 src/engine/Camera.cpp
 src/engine/Component.cpp
-src/engine/CompressedMapLoader.cpp
-src/engine/CompressedSpriteLoader.cpp
+src/engine/CompressedMapSpriteLoader.cpp
+src/engine/CompressedMapTextLoader.cpp
 src/engine/EngineCore.cpp
 src/engine/GameObject.cpp
 src/engine/MapChunks.cpp

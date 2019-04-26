@@ -16,24 +16,24 @@ void Transform::SetPosition(glm::vec3 position)
 	this->position = position;
 }
 
-glm::vec3 Transform::GetPosition()
-{
-	return position;
-}
-
 void Transform::SetRotation(glm::vec3 rotation)
 {
 	this->rotation = rotation;
 }
 
-glm::vec3 Transform::GetRotation()
-{
-	return rotation;
-}
-
 void Transform::SetScale(glm::vec3 scale)
 {
 	this->scale = scale;
+}
+
+glm::vec3 Transform::GetPosition()
+{
+	return position;
+}
+
+glm::vec3 Transform::GetRotation()
+{
+	return rotation;
 }
 
 glm::vec3 Transform::GetScale()
@@ -58,12 +58,14 @@ void Transform::Scale(glm::vec3 scale)
 
 glm::mat4 Transform::GetModelMatrix()
 {
+	//Generate an empty mat4
 	glm::mat4 modelMatrix(1.0f);
-
+	//Create individual rotation mat4 so that can can be each manipulated seperately and then times together
 	glm::mat4 rotXmatrix(1.0f);
 	glm::mat4 rotYmatrix(1.0f);
 	glm::mat4 rotZmatrix(1.0f);
 
+	//Apply transform elements to mat4
 	modelMatrix = glm::translate(modelMatrix, position);
 
 	rotXmatrix = glm::rotate(rotXmatrix, rotation.x, glm::vec3(1, 0, 0));

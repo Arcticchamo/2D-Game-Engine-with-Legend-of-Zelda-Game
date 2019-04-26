@@ -8,9 +8,11 @@
 #include <vector>
 
 class Camera;
+class CompressedMapSpriteLoader;
+class CompressedMapTextLoader;
+class GameObject;
 class Resources;
 class Screen;
-class GameObject;
 
 class EngineCore
 {
@@ -23,11 +25,11 @@ private:
 	std::weak_ptr<EngineCore> self;
 	//Current Camera references the current camera being rendered in the scene
 	std::weak_ptr<GameObject> currentCamera;
+	std::shared_ptr<CompressedMapSpriteLoader> compressedMapSpriteLoader;
+	std::shared_ptr<CompressedMapTextLoader> compressedMapTextLoader;
 	std::shared_ptr<Resources> resources;
 	std::shared_ptr<Screen> screen;
 
-	//std::shared_ptr<MapSpriteLoader> spriteLoader; //TODO: CHANGE THEIR NAMES TO BE MORE ACCURATE
-	//std::shared_ptr<CompressedMapLoader> compressedMapLoader;
 	//Called when Engine is started. Loads any prerequisites
 	void InitialiseEngine();
 public:
@@ -42,6 +44,8 @@ public:
 
 	//Getters Designed for obtaining key classes within the engine
 	std::shared_ptr<GameObject> GetCurrentCamera();
+	std::shared_ptr<CompressedMapSpriteLoader> GetMapSpriteLoader();
+	std::shared_ptr<CompressedMapTextLoader> GetMapTextLoader();
 	std::shared_ptr<Resources> GetResources();
 	std::shared_ptr<Screen> GetScreen();
 

@@ -4,7 +4,7 @@
 
 //TODO: COMMENT AND REWORK
 
-class CompressedSpriteLoader
+class CompressedMapSpriteLoader
 {
 public:
 	void LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData, int &w, int &h);

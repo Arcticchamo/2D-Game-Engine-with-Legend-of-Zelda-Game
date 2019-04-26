@@ -1,14 +1,14 @@
-#include "GameObject.h"
-
-#include <GL/glew.h>
-#include <glm/ext.hpp>
+#include "Component.h"
 
 #include <array>
+#include <GL/glew.h>
+#include <glm/ext.hpp>
 #include <iostream>
+#include <math.h>
 #include <memory>
 #include <vector>
 
-#include <math.h>
+
 
 /*
 WORK IN PROGRESS
@@ -17,17 +17,14 @@ TODO: TURN THIS INTO A COMPONENT!
 GET IT TO WORK AUTOMATICALLY.
 */
 
-class CompressedMapLoader;
 class MapChunks;
-class MapSpriteLoader;
-class MeshRenderer;
 
 struct ImageDataTile
 {
 	std::vector<unsigned char> RGBValues;
 };
 
-class BackGroundMap : public GameObject
+class BackGroundMap : public Component
 {
 private:
 	//Size of each individual tile (pre Chunk)
@@ -40,39 +37,24 @@ private:
 	int compressedMapWidth;
 	int compressedMapHeight;
 
+	//Storage Data
 	std::string fileLocation;
-	std::vector<int> unCompressedData;
-	std::vector<unsigned char> imageData;
-	std::vector<ImageDataTile> imageTiles;
+	std::vector<int> uncompressedTxtData; //Indexing of each tile and where it should be placed
+	std::vector<ImageDataTile> imageTiles; //Storage of each individual tile from the 
 
-	std::vector<MapChunks> chunks;	
-	
-	std::shared_ptr<MeshRenderer> meshRenderer;
-
-	std::weak_ptr<CompressedMapLoader> compressedMapLoader;
-	std::weak_ptr<MapSpriteLoader> mapSpriteLoader;
-
-
-	BackGroundMap(std::string fileLocation,
-		std::weak_ptr<CompressedMapLoader> compressedMapLoader,
-		std::weak_ptr<MapSpriteLoader> mapSpriteLoader);
+	std::vector<MapChunks> chunks; //Stores each generated map chunk
 
 	void GenerateBackGroundMap();
-	void CreateTileChunks();
-	void SeperateImageData();
-	void InitMeshInformation();
-
+	void CreateTileChunks(std::vector<unsigned char> &compressedImageData);
+	void SeperateImageData(std::vector<unsigned char> &compressedImageData);
 public:
+	void Init(std::string fileLocation);
 
-	static std::shared_ptr<BackGroundMap> Init(std::string fileLocation,
-		std::weak_ptr<CompressedMapLoader> compressedMapLoader,
-		std::weak_ptr<MapSpriteLoader> mapSpriteLoader);
-
-	void Display();
+	void Render();
 
 	unsigned int getImageTilesSize();
 	unsigned int getImageTilesSize(int index);
 	unsigned char getImageTileData(int tileIndex, int RGBindex);
 
-	~BackGroundMap();
+	~BackGroundMap() {}
 };

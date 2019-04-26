@@ -1,6 +1,6 @@
-#include "CompressedSpriteLoader.h"
+#include "CompressedMapSpriteLoader.h"
 
-void CompressedSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData, int &w, int &h)
+void CompressedMapSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::vector<unsigned char> &imageData, int &w, int &h)
 {
 	int width = 0;
 	int height = 0;

@@ -5,6 +5,8 @@
 #include "Object.h"
 #include <memory>
 
+class CompressedMapSpriteLoader;
+class CompressedMapTextLoader;
 class EngineCore;
 class GameObject;
 class Resources;
@@ -26,12 +28,15 @@ public:
 	void SetGameObject(std::weak_ptr<GameObject> GameObject);
 
 	//A part of the engines sub system of connectivity
-	std::weak_ptr<GameObject> GetGameObject();
+	std::shared_ptr<CompressedMapSpriteLoader> GetMapSpriteLoader();
+	std::shared_ptr<CompressedMapTextLoader> GetMapTextLoader();
+	std::shared_ptr<GameObject> GetCurrentCamera();
 	std::shared_ptr<Resources> GetResources();
 	std::shared_ptr<Screen> GetScreen();
 	std::shared_ptr<Transform> GetTransfrom();
+
 	std::weak_ptr<EngineCore> GetEngineCore();
-	std::shared_ptr<GameObject> GetCurrentCamera();
+	std::weak_ptr<GameObject> GetGameObject();
 
 	virtual ~Component() {};
 };

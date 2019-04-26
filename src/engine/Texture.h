@@ -1,5 +1,4 @@
 #include "Resource.h"
-
 #include <GL/glew.h>
 #include <memory>
 #include <stb_image/stb_image.h>

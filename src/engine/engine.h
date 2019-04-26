@@ -4,14 +4,12 @@
 
 //Header Designed to include in scripts so they have acces to each element of the engine
 //TODO: UPDATE LIST OF HEADERS
-//#include "BackGroundMap.h"
+#include "BackGroundMap.h"
 #include "Camera.h"
 #include "Component.h"
-//#include "CompressedMapLoader.h"
 #include "EngineCore.h"
 #include "GameObject.h"
 #include "MapChunks.h"
-//#include "MapSpriteLoader.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "MeshRenderer.h"

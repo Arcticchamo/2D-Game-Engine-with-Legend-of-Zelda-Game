@@ -1,5 +1,7 @@
-#include "EngineCore.h"
 #include "Camera.h"
+#include "CompressedMapSpriteLoader.h"
+#include "CompressedMapTextLoader.h"
+#include "EngineCore.h"
 #include "GameObject.h"
 #include "Resources.h"
 #include "Screen.h"
@@ -25,7 +27,8 @@ void EngineCore::InitialiseEngine()
 	{
 		throw std::exception();
 	}
-
+	compressedMapSpriteLoader = std::make_shared<CompressedMapSpriteLoader>();
+	compressedMapTextLoader = std::make_shared<CompressedMapTextLoader>();
 	resources = std::make_shared<Resources>();
 }
 
@@ -73,6 +76,34 @@ void EngineCore::UpdateEngine()
 
 void EngineCore::DestroyEngine()
 {}
+
+//Returns the mapSpriteLoader smart ptr 
+//throws an exception if an error occurs
+std::shared_ptr<CompressedMapSpriteLoader> EngineCore::GetMapSpriteLoader()
+{
+	try
+	{
+		return compressedMapSpriteLoader;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
+//Returns the mapTextLoader smart ptr 
+//throws an exception if an error occurs
+std::shared_ptr<CompressedMapTextLoader> EngineCore::GetMapTextLoader()
+{
+	try
+	{
+		return compressedMapTextLoader;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
 
 //Returns the resources smart ptr 
 //throws an exception if an error occurs

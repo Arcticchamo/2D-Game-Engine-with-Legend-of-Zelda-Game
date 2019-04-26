@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 
+//Vertex Buffer designed for storing vertex information
 class VertexBuffer
 {
 private:

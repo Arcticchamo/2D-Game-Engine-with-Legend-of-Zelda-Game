@@ -1,6 +1,8 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 
+/* Constructor initialises standard variables
+TODO: Temporarily creates a standard mesh and texture coords. Fix this to work with the MESH */
 VertexArray::VertexArray()
 {
 	dirty = false;
@@ -33,7 +35,7 @@ VertexArray::VertexArray()
 	setBuffer("in_Position", positions);
 	setBuffer("in_TexCoord", texCoords);
 }
-
+/* Assign each buffer with the appropriate information depending on the name */
 void VertexArray::setBuffer(std::string bufferName, std::shared_ptr<VertexBuffer> buffer)
 {
 	if (bufferName == "in_Position")
@@ -62,18 +64,19 @@ int VertexArray::getVertexCount()
 	{
 		throw std::exception();
 	}
-
+	//Data is stored contiguously, so it has to be divided by what the information was previously created as
+	//In this return, its the contiguous data / vertex position data (vec3)
 	return buffers.at(0)->getDataSize() / buffers.at(0)->getComponents();
 }
 
-GLuint VertexArray::getId()
+/* GetId returns the id of the VAO
+if "dirty" is true, information has been added and needs to be bound to the VAO before returning */
+GLuint VertexArray::GetId()
 {
 	if (dirty)
 	{
 		glBindVertexArray(id);
-
 		GLuint i = 0;
-
 		for (auto it = buffers.begin(); it != buffers.end(); it++)
 		{
 			if (*it)
@@ -86,11 +89,9 @@ GLuint VertexArray::getId()
 			}
 			i++;
 		}
-
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 		dirty = false;
 	}
-
 	return id;
 }

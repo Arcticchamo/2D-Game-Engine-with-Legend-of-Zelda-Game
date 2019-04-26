@@ -11,14 +11,13 @@
 
 //Class designed to take a compressed map sprite sheet 
 //text file and uncompress it
-class CompressedMapLoader
+class CompressedMapTextLoader
 {
 private:
+	void LoadFile(std::string fileLocation, std::vector<unsigned char> &compressedData);
 
 public:
-	CompressedMapLoader() {}
-	~CompressedMapLoader() {}
-
+	CompressedMapTextLoader() {}
+	~CompressedMapTextLoader() {}
 	void UncompressMapTxtFile(std::string fileLocation, std::vector<int> &uncompressedData);
-	void LoadFile(std::string fileLocation, std::vector<unsigned char> &compressedData);
 };

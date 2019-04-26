@@ -18,14 +18,16 @@ private:
 	std::weak_ptr<BackGroundMap> backgroundMap;
 	std::shared_ptr<Texture> texture;
 	glm::vec3 position;
+
+	void CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData);
+	void AssignInformation(int tileWidth, int tileHeight, int tileIndex, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData);
 public:
 	MapChunks(std::shared_ptr<BackGroundMap> map);
 	void CreateChunk(int widthChunks, int heightChunks, 
 					int tileWidth, int tileHeight,
 					int mapWidth, int mapHeight, 
-					std::vector<int> uncompressedData);
-	void CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData);
-	void AssignInformation(int tileWidth, int tileHeight, int tileIndex, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData);
-	std::shared_ptr<Texture> GetTexture() { return texture; }
-	glm::vec3 GetPosition() { return position; }
+					std::vector<int> uncompressedTxtData);
+	
+	//std::shared_ptr<Texture> GetTexture() { return texture; }
+	//glm::vec3 GetPosition() { return position; }
 };

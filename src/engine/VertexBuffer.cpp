@@ -1,5 +1,6 @@
 #include "VertexBuffer.h"
 
+//Constructor assigning default values
 VertexBuffer::VertexBuffer()
 {
 	components = 0;
@@ -14,6 +15,8 @@ VertexBuffer::VertexBuffer()
 	}
 }
 
+/* The Add functions first check if the data type is valid for the current buffer
+Then, if allowed, pushes the data into the vector */
 void VertexBuffer::add(glm::vec2 data)
 {
 	if (components != 2 && components != 0)
@@ -63,6 +66,8 @@ int VertexBuffer::getDataSize()
 	return data.size();
 }
 
+/* Get Id returns the id of the current buffer
+If the dirty bool is true, that means information has been added but not applied to the buffer */
 GLuint VertexBuffer::getId()
 {
 	if (dirty)

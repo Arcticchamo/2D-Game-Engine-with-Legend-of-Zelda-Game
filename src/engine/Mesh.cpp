@@ -23,7 +23,7 @@ int Mesh::GetTriangleCount()
 
 GLuint Mesh::GetId()
 {
-	return sprite->getId();
+	return sprite->GetId();
 }
 
 Mesh::~Mesh()

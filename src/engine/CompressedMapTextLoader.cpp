@@ -1,4 +1,4 @@
-#include "CompressedMapLoader.h"
+#include "CompressedMapTextLoader.h"
 
 //Function Derived from MiniZ  
 static int tinfl_put_buf_func(const void* pBuf, int len, void *pUser)
@@ -14,7 +14,7 @@ static int tinfl_put_buf_func(const void* pBuf, int len, void *pUser)
 }
 
 //Uses MiniZ to uncompress the file from the MapGenerator Tool
-void CompressedMapLoader::UncompressMapTxtFile(std::string fileLocation, std::vector<int> &uncompressedData)
+void CompressedMapTextLoader::UncompressMapTxtFile(std::string fileLocation, std::vector<int> &uncompressedData)
 {
 	std::vector<unsigned char> compressedData;
 	LoadFile(fileLocation, compressedData);
@@ -39,7 +39,7 @@ void CompressedMapLoader::UncompressMapTxtFile(std::string fileLocation, std::ve
 }
 
 //Loads in the file using C -- This is due to C++ not correcly reading in the txt file
-void CompressedMapLoader::LoadFile(std::string fileLocation, std::vector<unsigned char> &compressedData)
+void CompressedMapTextLoader::LoadFile(std::string fileLocation, std::vector<unsigned char> &compressedData)
 {
 	std::FILE *f = fopen(fileLocation.c_str(), "rb");
 
