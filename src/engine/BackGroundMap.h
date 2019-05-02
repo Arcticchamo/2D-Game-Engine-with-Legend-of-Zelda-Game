@@ -18,6 +18,8 @@ GET IT TO WORK AUTOMATICALLY.
 */
 
 class MapChunks;
+class MeshRenderer;
+class Transform;
 
 struct ImageDataTile
 {
@@ -43,6 +45,9 @@ private:
 	std::vector<ImageDataTile> imageTiles; //Storage of each individual tile from the 
 
 	std::vector<MapChunks> chunks; //Stores each generated map chunk
+
+	std::weak_ptr<MeshRenderer> meshRenderer;
+	std::weak_ptr<Transform> transform;
 
 	void GenerateBackGroundMap();
 	void CreateTileChunks(std::vector<unsigned char> &compressedImageData);

@@ -32,4 +32,13 @@ public:
 		resources.push_back(res);
 		return res;
 	}
+
+	template <class R>
+	std::shared_ptr<R> Create()
+	{
+		std::shared_ptr<R> res = std::make_shared();
+		res = res->Init();
+		resources.push_back(res);
+		return res;
+	}
 };

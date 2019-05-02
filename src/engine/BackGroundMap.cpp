@@ -3,11 +3,17 @@
 #include "CompressedMapTextLoader.h"
 #include "EngineCore.h"
 #include "MapChunks.h"
+#include "Material.h"
+#include "MeshRenderer.h"
 #include "Resources.h"
+#include "Transform.h"
 
 void BackGroundMap::Init(std::string fileLocation)
 {
 	this->fileLocation = fileLocation;
+	transform = gameObject.lock()->AddComponent<Transform>();
+	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>();
+	meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 	GenerateBackGroundMap();
 }
 
