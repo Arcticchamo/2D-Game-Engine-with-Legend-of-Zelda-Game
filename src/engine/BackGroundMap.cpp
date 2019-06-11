@@ -12,7 +12,7 @@ void BackGroundMap::Init(std::string fileLocation)
 {
 	this->fileLocation = fileLocation;
 	transform = gameObject.lock()->AddComponent<Transform>();
-	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>();
+	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("Mesh");
 	meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 	GenerateBackGroundMap();
 }
@@ -56,6 +56,8 @@ void BackGroundMap::CreateTileChunks(std::vector<unsigned char> &compressedImage
 		for (int x = 0; x < widthChunks; x++)
 		{
 			MapChunks newChunk(std::dynamic_pointer_cast<BackGroundMap>(shared_from_this()));
+			std::string tempName = std::to_string(heightChunks + widthChunks);
+			meshRenderer.lock()->GetMaterial()->SetValue("", GetResources()->Create<Texture>());
 			newChunk.CreateChunk(x, y, tileWidth, tileHeight, mapWidth, mapHeight, uncompressedTxtData);
 			chunks.push_back(newChunk);
 		}

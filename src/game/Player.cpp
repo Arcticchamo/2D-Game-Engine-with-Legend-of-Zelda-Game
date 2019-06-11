@@ -8,7 +8,6 @@ void Player::Init()
 
 	transform = gameObject.lock()->AddComponent<Transform>();
 	transform.lock()->Translate(glm::vec3((640 / 2), (480 / 2), 0.0f));
-	//transform.lock()->RotateObject(glm::vec3(0));
 	transform.lock()->Scale(glm::vec3(10, 10, 1));
 
 	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("mesh");
@@ -18,19 +17,13 @@ void Player::Init()
 
 void Player::Update()
 {
-	//REPLACE WITH ITERATORS
-	/*for (size_t i = 0; i < components.size(); i++)
-	{
-		components.at(i)->Update();
-	}*/
-
 	glm::vec3 position(0);
 	glm::vec3 rotation(0);
 	glm::vec3 scale(1.0f);
 
 	InputController(position, rotation, scale);
 
-	std::cout << "Player Position = POS X: " << transform.lock()->GetPosition().x << ", POS Y: " << transform.lock()->GetPosition().y << std::endl;
+	//std::cout << "Player Position = POS X: " << transform.lock()->GetPosition().x << ", POS Y: " << transform.lock()->GetPosition().y << std::endl;
 
 	transform.lock()->Translate(position);
 	//transform.lock()->TranslateObject(position);
