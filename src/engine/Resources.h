@@ -1,5 +1,6 @@
 #include "Resource.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -36,9 +37,20 @@ public:
 	template <class R>
 	std::shared_ptr<R> Create()
 	{
-		std::shared_ptr<R> res = std::make_shared();
+		std::shared_ptr<R> res = std::make_shared<R>();
 		res = res->Init();
 		resources.push_back(res);
 		return res;
 	}
+
+	/*
+	template <class R, class A>
+	std::shared_ptr<R> Create(A a)
+	{
+		std::shared_ptr<R> res = std::make_shared(a);
+		res = res->Init();
+		resources.push_back(res);
+		return res;
+	}*/
+
 };

@@ -1,0 +1,10 @@
+<map id="Component" name="Component">
+<area shape="rect" id="node1" title=" " alt="" coords="249,95,337,121"/>
+<area shape="rect" id="node4" href="$class_back_ground_map.html" title=" " alt="" coords="5,169,124,196"/>
+<area shape="rect" id="node5" href="$class_camera.html" title=" " alt="" coords="149,169,215,196"/>
+<area shape="rect" id="node6" href="$class_mesh_renderer.html" title=" " alt="" coords="239,169,346,196"/>
+<area shape="rect" id="node7" href="$class_player.html" title=" " alt="" coords="370,169,429,196"/>
+<area shape="rect" id="node8" href="$class_transform.html" title=" " alt="" coords="453,169,532,196"/>
+<area shape="rect" id="node2" href="$class_object.html" title=" " alt="" coords="193,13,253,39"/>
+<area shape="rect" id="node3" title=" " alt="" coords="277,5,449,47"/>
+</map>
