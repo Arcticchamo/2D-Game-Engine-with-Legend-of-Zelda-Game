@@ -40,8 +40,8 @@ public:
 	void SetName(std::string name);
 
 	//Getters that access the engineCore and return the object ptrs
-	std::weak_ptr<EngineCore> GetEngineCore();
-	std::weak_ptr<Transform> GetTransfrom();
+	std::shared_ptr<EngineCore> GetEngineCore();
+	std::shared_ptr<Transform> GetTransfrom();
 	std::shared_ptr<GameObject> GetCurrentCamera();
 	std::shared_ptr<Resources> GetResources();
 	std::shared_ptr<Screen> GetScreen();

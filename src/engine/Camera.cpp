@@ -11,7 +11,7 @@ void Camera::Init()
 	//Assign a default position
 	transform->Translate(glm::vec3(0.0f, 0.0f, 0.0f));
 	//Push the camera GameObject into a vector stored inside the engine
-	GetEngineCore().lock()->cameraList.push_back(gameObject);
+	GetEngineCore()->cameraList.push_back(gameObject);
 }
 
 void Camera::Init(CAMERA_TYPE cameraType)
@@ -22,7 +22,7 @@ void Camera::Init(CAMERA_TYPE cameraType)
 	//Assign a default position
 	transform->Translate(glm::vec3(0.0f, 0.0f, 0.0f));
 	//Push the camera GameObject into a vector stored inside the engine
-	GetEngineCore().lock()->cameraList.push_back(gameObject);
+	GetEngineCore()->cameraList.push_back(gameObject);
 }
 
 glm::mat4 Camera::GetViewMatrix()

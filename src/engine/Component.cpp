@@ -14,12 +14,12 @@ void Component::SetGameObject(std::weak_ptr<GameObject> GameObject)
 
 std::shared_ptr<CompressedMapSpriteLoader> Component::GetMapSpriteLoader()
 {
-	return gameObject.lock()->GetEngineCore().lock()->GetMapSpriteLoader();
+	return gameObject.lock()->GetEngineCore()->GetMapSpriteLoader();
 }
 
 std::shared_ptr<CompressedMapTextLoader> Component::GetMapTextLoader()
 {
-	return gameObject.lock()->GetEngineCore().lock()->GetMapTextLoader();
+	return gameObject.lock()->GetEngineCore()->GetMapTextLoader();
 }
 
 std::shared_ptr<GameObject> Component::GetCurrentCamera()
@@ -42,12 +42,12 @@ std::shared_ptr<Transform> Component::GetTransfrom()
 	return gameObject.lock()->GetComponent<Transform>();
 }
 
-std::weak_ptr<EngineCore> Component::GetEngineCore()
+std::shared_ptr<EngineCore> Component::GetEngineCore()
 {
 	return gameObject.lock()->GetEngineCore();
 }
 
-std::weak_ptr<GameObject> Component::GetGameObject()
+std::shared_ptr<GameObject> Component::GetGameObject()
 {
-	return gameObject;
+	return gameObject.lock();
 }

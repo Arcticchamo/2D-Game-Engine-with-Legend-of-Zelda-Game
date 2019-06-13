@@ -9,6 +9,7 @@
 #include <vector>
 
 class MapChunks;
+class GameObject;
 
 struct ImageDataTile
 {
@@ -33,7 +34,7 @@ private:
 	std::vector<int> uncompressedTxtData; //Indexing of each tile and where it should be placed
 	std::vector<ImageDataTile> imageTiles; //Storage of each individual tile from the 
 
-	std::vector<std::shared_ptr<MapChunks> > chunks; //Stores each generated map chunk
+	std::vector<std::weak_ptr<MapChunks> > backgroundChunks; //Stores each generated map chunk
 
 	void GenerateBackGroundMap();
 	void CreateTileChunks();

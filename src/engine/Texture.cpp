@@ -66,11 +66,13 @@ void Texture::Create()
 	}
 }
 
-void Texture::SetPixel(unsigned char r, unsigned char g, unsigned char b)
+void Texture::SetPixel(unsigned char r, unsigned char g, unsigned char b, int width, int height)
 {
 	pixelData.push_back(r);
 	pixelData.push_back(g);
 	pixelData.push_back(b);
+	texWidth = width;
+	texHeight = height;
 	dirty = true;
 }
 

@@ -22,8 +22,8 @@ void BackGroundMap::GenerateBackGroundMap()
 	std::vector<unsigned char> compressedImageData;
 
 	//Load in the compressed map sprite image and the uncompressed txt file with the indexing of each tile
-	GetEngineCore().lock()->GetMapSpriteLoader()->LoadInSpriteMap(pngString, compressedImageData, compressedMapWidth, compressedMapHeight);
-	GetEngineCore().lock()->GetMapTextLoader()->UncompressMapTxtFile(txtString, uncompressedTxtData);
+	GetEngineCore()->GetMapSpriteLoader()->LoadInSpriteMap(pngString, compressedImageData, compressedMapWidth, compressedMapHeight);
+	GetEngineCore()->GetMapTextLoader()->UncompressMapTxtFile(txtString, uncompressedTxtData);
 
 	//The first 4 numbers in the uncompressedData are the
 	//Tile Width, Tile Height, Map Width, Map Height
@@ -45,15 +45,15 @@ void BackGroundMap::CreateTileChunks()
 	int widthChunks = (int)((float)mapWidth / 512.0f + 0.5f);
 	int heightChunks = (int)((float)mapHeight / 512.0f + 0.5f);
 
-	chunks.reserve(widthChunks * heightChunks);
+	backgroundChunks.reserve(widthChunks * heightChunks);
 
 	for (int y = 0; y < heightChunks; y++)
 	{
 		for (int x = 0; x < widthChunks; x++)
 		{
-			std::shared_ptr<MapChunks> newChunk = std::make_shared<MapChunks>(std::dynamic_pointer_cast<BackGroundMap>(shared_from_this()));
-			newChunk->CreateChunk(x, y, tileWidth, tileHeight, mapWidth, mapHeight, uncompressedTxtData);
-			chunks.push_back(newChunk);
+			std::shared_ptr<GameObject> newChunk = gameObject.lock()->GetEngineCore()->AddGameObject<MapChunks>(std::dynamic_pointer_cast<BackGroundMap>(shared_from_this()));
+			newChunk->GetComponent<MapChunks>()->CreateChunk(x, y, tileWidth, tileHeight, mapWidth, mapHeight, uncompressedTxtData);
+			backgroundChunks.push_back(newChunk->GetComponent<MapChunks>());
 		}
 	}
 

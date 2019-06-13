@@ -1,5 +1,5 @@
 #include "BackGroundMap.h"
-#include "Component.h"
+#include "GameObject.h"
 #include "MapChunks.h"
 #include "Material.h"
 #include "MeshRenderer.h"
@@ -8,7 +8,7 @@
 #include "Texture.h"
 #include "Transform.h"
 
-MapChunks::MapChunks(std::shared_ptr<BackGroundMap> map)
+void MapChunks::Init(std::shared_ptr<BackGroundMap> map)
 {
 	backgroundMap = map;
 }
@@ -22,8 +22,12 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, in
 	int numberOfTilesInChunkX = 512 / tileWidth;
 	int numberOfTilesInChunkY = 512 / tileHeight;
 
-	transform = AddComponent<Transform>(glm::vec3(widthChunks * 512, heightChunks * 512, 0));
-	meshRenderer = AddComponent<MeshRenderer>("Mesh");
+	transform = gameObject.lock()->AddComponent<Transform>(
+		glm::vec3(widthChunks * 512, heightChunks * 512, 0), //Position
+		glm::vec3(0,0,0), //Rotation
+		glm::vec3(512, 512, 1)); //Scale
+
+	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("Mesh");
 	meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 
 	int skip = mapWidth / tileWidth; //Gets the number of tiles along X 
@@ -47,12 +51,12 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, in
 			}
 			else
 			{
+				//Assign black to the null information
 				AssignBlackInformation();
 			}
 		}
 	}
-	//TODO - ASSIGN PIXEL DATA
-	//CreateTexture(rgbData);
+	CreateTexture(rgbData);
 
 	//Empty all of the garbage information at the end
 	rgbData.empty();
@@ -99,19 +103,27 @@ void MapChunks::AssignBlackInformation()
 void MapChunks::CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData)
 {
 	//TODO - CREATE TEXTURE THEN USE A "SETPIXEL()" FUNCTION TO ADD THE INFORMATION OF EACH PIXEL INTO A LOCAL VERTEX
-	////Create Texture
+	//Create Texture
+
+	texture = std::make_shared<Texture>();
+
+	for (size_t i = 0; i < rgbData.size(); i += 3)
+	{
+		texture->SetPixel(rgbData.at(i), rgbData.at(i + 1), rgbData.at(i + 2), 512, 512);
+	}
+
 	//GLuint textureID;
-	//glGenTextures(1, &textureID);
-	//if (!textureID)
+	//glGenTextures(1, texture->GetId());
+	//if (!texture->GetId())
 	//{
 	//	throw std::exception();
 	//}
 
-	//glBindTexture(GL_TEXTURE_2D, textureID);
+	//glBindTexture(GL_TEXTURE_2D, texture->GetId());
 	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, &rgbData.at(0));
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	//glBindTexture(GL_TEXTURE_2D, 0);
-
-	//texture = std::make_shared<Texture>(textureID);
+	
+	meshRenderer.lock()->GetMaterial()->SetValue("Chunk_Texture", texture);
 }

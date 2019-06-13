@@ -69,14 +69,14 @@ void GameObject::Render()
 	}
 }
 
-std::weak_ptr<EngineCore> GameObject::GetEngineCore()
+std::shared_ptr<EngineCore> GameObject::GetEngineCore()
 {
-	return engineCore;
+	return engineCore.lock();
 }
 
-std::weak_ptr<Transform> GameObject::GetTransfrom()
+std::shared_ptr<Transform> GameObject::GetTransfrom()
 {
-	return transform;
+	return transform.lock();
 }
 
 std::shared_ptr<GameObject> GameObject::GetCurrentCamera()

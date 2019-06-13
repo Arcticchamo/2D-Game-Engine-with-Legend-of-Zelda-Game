@@ -18,7 +18,7 @@ public:
 	Texture();
 	static std::shared_ptr<Texture> Init();
 	static std::shared_ptr<Texture> Init(std::string path);
-	void SetPixel(unsigned char r, unsigned char g, unsigned char b);
+	void SetPixel(unsigned char r, unsigned char g, unsigned char b, int width, int height);
 	GLuint GetId();
 	~Texture();
 };
