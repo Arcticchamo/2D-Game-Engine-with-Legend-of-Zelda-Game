@@ -41,7 +41,10 @@ public:
 
 	//Getters that access the engineCore and return the object ptrs
 	std::weak_ptr<EngineCore> GetEngineCore();
+	std::weak_ptr<Transform> GetTransfrom();
 	std::shared_ptr<GameObject> GetCurrentCamera();
+	std::shared_ptr<Resources> GetResources();
+	std::shared_ptr<Screen> GetScreen();
 
 	//Add Component takes a Component and pushes it into the components vector
 	//It passes the current GameObject into the component as a shared ptr

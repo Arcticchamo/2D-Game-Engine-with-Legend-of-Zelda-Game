@@ -3,19 +3,13 @@
 #include "CompressedMapTextLoader.h"
 #include "EngineCore.h"
 #include "MapChunks.h"
-#include "Material.h"
-#include "MeshRenderer.h"
-#include "Resources.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Transform.h"
 
 void BackGroundMap::Init(std::string fileLocation)
 {
 	this->fileLocation = fileLocation;
-	transform = gameObject.lock()->AddComponent<Transform>();
-	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("Mesh");
-	meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
+	//transform = gameObject.lock()->AddComponent<Transform>();
+	//meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("Mesh");
+	//meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 	GenerateBackGroundMap();
 }
 
@@ -24,7 +18,6 @@ void BackGroundMap::GenerateBackGroundMap()
 {
 	std::string txtString = fileLocation + ".txt";
 	std::string pngString = fileLocation + ".png";
-
 
 	std::vector<unsigned char> compressedImageData;
 
@@ -40,10 +33,11 @@ void BackGroundMap::GenerateBackGroundMap()
 	mapHeight = uncompressedTxtData.at(3);
 	uncompressedTxtData.erase(uncompressedTxtData.begin(), uncompressedTxtData.begin() + 4);
 
-	CreateTileChunks(compressedImageData);
+	SeperateImageData(compressedImageData); //Seperate the image data
+	CreateTileChunks();
 }
 
-void BackGroundMap::CreateTileChunks(std::vector<unsigned char> &compressedImageData)
+void BackGroundMap::CreateTileChunks()
 {
 	//Calculate how many chunks is needed for the map
 	//If the map does not divide by 512, go to the next whole number
@@ -53,17 +47,13 @@ void BackGroundMap::CreateTileChunks(std::vector<unsigned char> &compressedImage
 
 	chunks.reserve(widthChunks * heightChunks);
 
-	SeperateImageData(compressedImageData);
-
 	for (int y = 0; y < heightChunks; y++)
 	{
 		for (int x = 0; x < widthChunks; x++)
 		{
-			/*MapChunks newChunk(std::dynamic_pointer_cast<BackGroundMap>(shared_from_this()));
-			std::string tempName = std::to_string(heightChunks + widthChunks);
-			meshRenderer.lock()->GetMaterial()->SetValue("Chunk", GetResources()->Create<Texture>());
-			newChunk.CreateChunk(x, y, tileWidth, tileHeight, mapWidth, mapHeight, uncompressedTxtData);
-			chunks.push_back(newChunk);*/
+			std::shared_ptr<MapChunks> newChunk = std::make_shared<MapChunks>(std::dynamic_pointer_cast<BackGroundMap>(shared_from_this()));
+			newChunk->CreateChunk(x, y, tileWidth, tileHeight, mapWidth, mapHeight, uncompressedTxtData);
+			chunks.push_back(newChunk);
 		}
 	}
 
@@ -114,16 +104,19 @@ void BackGroundMap::Render()
 	//}	
 }
 
+//Returns the image tiles size
 unsigned int BackGroundMap::getImageTilesSize()
 {
 	return imageTiles.size();
 }
 
+//returns the amount of stored RGB values within a specific tile
 unsigned int BackGroundMap::getImageTilesSize(int index)
 {
 	return imageTiles.at(index).RGBValues.size();
 }
 
+//returns a specific RGB value from a specific tile
 unsigned char BackGroundMap::getImageTileData(int tileIndex, int RGBindex)
 {
 	return imageTiles.at(tileIndex).RGBValues.at(RGBindex);

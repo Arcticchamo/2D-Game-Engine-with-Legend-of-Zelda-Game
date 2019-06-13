@@ -29,12 +29,12 @@ std::shared_ptr<GameObject> Component::GetCurrentCamera()
 
 std::shared_ptr<Resources> Component::GetResources()
 {
-	return gameObject.lock()->GetEngineCore().lock()->GetResources();
+	return gameObject.lock()->GetResources();
 }
 
 std::shared_ptr<Screen> Component::GetScreen()
 {
-	return gameObject.lock()->GetEngineCore().lock()->GetScreen();
+	return gameObject.lock()->GetScreen();
 }
 
 std::shared_ptr<Transform> Component::GetTransfrom()

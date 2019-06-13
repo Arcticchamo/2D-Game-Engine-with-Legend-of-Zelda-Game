@@ -1,6 +1,12 @@
 #include "BackGroundMap.h"
+#include "Component.h"
 #include "MapChunks.h"
+#include "Material.h"
+#include "MeshRenderer.h"
+#include "Resources.h"
+#include "Shader.h"
 #include "Texture.h"
+#include "Transform.h"
 
 MapChunks::MapChunks(std::shared_ptr<BackGroundMap> map)
 {
@@ -16,8 +22,9 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, in
 	int numberOfTilesInChunkX = 512 / tileWidth;
 	int numberOfTilesInChunkY = 512 / tileHeight;
 
-	//TODO: MAKE IT UPDATE THE TRANSFORM POS INSTEAD
-	//position = glm::vec3(widthChunks * 512, heightChunks * 512, 0.0f);
+	transform = AddComponent<Transform>(glm::vec3(widthChunks * 512, heightChunks * 512, 0));
+	meshRenderer = AddComponent<MeshRenderer>("Mesh");
+	meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 
 	int skip = mapWidth / tileWidth; //Gets the number of tiles along X 
 
@@ -40,7 +47,7 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, in
 			}
 			else
 			{
-				//TODO - ASSIGN BLACK SQUARE
+				AssignBlackInformation();
 			}
 		}
 	}
@@ -81,6 +88,12 @@ void MapChunks::AssignInformation(
 			index += 3;
 		}
 	}
+}
+
+//This assigns black colour information to the chunks, to reduce undefined behaviour 
+void MapChunks::AssignBlackInformation()
+{
+	//TODO - ASSIGN BLACK SQUARE
 }
 
 void MapChunks::CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData)

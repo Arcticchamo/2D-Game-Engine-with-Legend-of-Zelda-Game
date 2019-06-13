@@ -74,7 +74,22 @@ std::weak_ptr<EngineCore> GameObject::GetEngineCore()
 	return engineCore;
 }
 
+std::weak_ptr<Transform> GameObject::GetTransfrom()
+{
+	return transform;
+}
+
 std::shared_ptr<GameObject> GameObject::GetCurrentCamera()
 {
 	return engineCore.lock()->GetCurrentCamera();
+}
+
+std::shared_ptr<Resources> GameObject::GetResources()
+{
+	return engineCore.lock()->GetResources();
+}
+
+std::shared_ptr<Screen> GameObject::GetScreen()
+{
+	return engineCore.lock()->GetScreen();
 }

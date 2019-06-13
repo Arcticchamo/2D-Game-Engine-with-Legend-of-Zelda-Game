@@ -8,18 +8,7 @@
 #include <memory>
 #include <vector>
 
-
-
-/*
-WORK IN PROGRESS
-COMMENT
-TODO: TURN THIS INTO A COMPONENT!
-GET IT TO WORK AUTOMATICALLY.
-*/
-
 class MapChunks;
-class MeshRenderer;
-class Transform;
 
 struct ImageDataTile
 {
@@ -44,13 +33,10 @@ private:
 	std::vector<int> uncompressedTxtData; //Indexing of each tile and where it should be placed
 	std::vector<ImageDataTile> imageTiles; //Storage of each individual tile from the 
 
-	std::vector<MapChunks> chunks; //Stores each generated map chunk
-
-	std::weak_ptr<MeshRenderer> meshRenderer;
-	std::weak_ptr<Transform> transform;
+	std::vector<std::shared_ptr<MapChunks> > chunks; //Stores each generated map chunk
 
 	void GenerateBackGroundMap();
-	void CreateTileChunks(std::vector<unsigned char> &compressedImageData);
+	void CreateTileChunks();
 	void SeperateImageData(std::vector<unsigned char> &compressedImageData);
 public:
 	void Init(std::string fileLocation);
