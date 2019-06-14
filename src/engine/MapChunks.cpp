@@ -52,7 +52,7 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, in
 			else
 			{
 				//Assign black to the null information
-				AssignBlackInformation();
+				AssignBlackInformation(tileWidth, tileHeight, x, y, numberOfTilesInChunkX, rgbData);
 			}
 		}
 	}
@@ -95,35 +95,47 @@ void MapChunks::AssignInformation(
 }
 
 //This assigns black colour information to the chunks, to reduce undefined behaviour 
-void MapChunks::AssignBlackInformation()
+void MapChunks::AssignBlackInformation(
+	int tileWidth, int tileHeight,
+	int tileX, int tileY,
+	int numberOfTilesInChunksX,
+	std::array <unsigned char, rgbDataSize> &rgbData)
 {
-	//TODO - ASSIGN BLACK SQUARE
+	//Index used to track the information stored within each tile
+	int index = 0;
+
+	//Stacked for loop - width tilewidth * 3 - height tile height 
+	for (int y = 0; y < tileHeight; y++)
+	{
+		for (int x = 0; x < tileWidth; x++)
+		{
+			int chunkRowSkip = y * chunkWidth * 3 + x * 3; //Chunk row skip
+			//Tile row skip X and Y
+			int tileSkipY = tileY * (numberOfTilesInChunksX * (tileWidth * 3)) * tileHeight;
+			int tileSkipX = tileX * tileWidth * 3;
+			//Combine the skip variables 
+			int skip = chunkRowSkip + (tileSkipY + tileSkipX);
+
+			//Assign to rgbData the value 0 for black 
+			//Alpha is currently not calculated
+			rgbData.at(skip) = 0;
+			rgbData.at(skip + 1) = 0;
+			rgbData.at(skip + 2) = 0;
+
+			index += 3;
+		}
+	}
 }
 
 void MapChunks::CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData)
 {
-	//TODO - CREATE TEXTURE THEN USE A "SETPIXEL()" FUNCTION TO ADD THE INFORMATION OF EACH PIXEL INTO A LOCAL VERTEX
-	//Create Texture
-
+	//Assign "texture" with a fresh set of information. 
 	texture = GetResources()->Create<Texture>(512, 512);
-
+	//Assign the pixel data to the texture
 	for (size_t i = 0; i < rgbData.size(); i += 3)
 	{
 		texture->SetPixel(rgbData.at(i), rgbData.at(i + 1), rgbData.at(i + 2));
 	}
-
-	//GLuint textureID;
-	//glGenTextures(1, texture->GetId());
-	//if (!texture->GetId())
-	//{
-	//	throw std::exception();
-	//}
-
-	//glBindTexture(GL_TEXTURE_2D, texture->GetId());
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, &rgbData.at(0));
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	
+	//Assign the texture to the material attached to the object
 	meshRenderer.lock()->GetMaterial()->SetValue("Chunk_Texture", texture);
 }

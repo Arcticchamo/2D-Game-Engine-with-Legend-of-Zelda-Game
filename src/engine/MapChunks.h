@@ -26,7 +26,7 @@ private:
 
 	void CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData);
 	void AssignInformation(int tileWidth, int tileHeight, int tileIndex, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData);
-	void AssignBlackInformation();
+	void AssignBlackInformation(int tileWidth, int tileHeight, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData);
 public:
 	void Init(std::shared_ptr<BackGroundMap> map);
 
