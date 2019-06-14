@@ -12,13 +12,13 @@ private:
 	int texWidth, texHeight;
 	GLuint id;
 	std::vector<unsigned char> pixelData;
-	void Load(std::string path);
-	void Create();
+
 public:
 	Texture();
-	static std::shared_ptr<Texture> Init();
-	static std::shared_ptr<Texture> Init(std::string path);
-	void SetPixel(unsigned char r, unsigned char g, unsigned char b, int width, int height);
+	Texture(int texWidth, int texHeight);
+	void Load(std::string path);
+	void Create(int texWidth, int texHeight);
+	void SetPixel(unsigned char r, unsigned char g, unsigned char b);
 	GLuint GetId();
 	~Texture();
 };

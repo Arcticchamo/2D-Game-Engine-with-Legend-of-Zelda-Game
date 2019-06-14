@@ -9,7 +9,6 @@ class Resource
 protected:
 	std::string filePath;
 public:
-	void Init(std::string path) {}
 	std::string GetFilePath() { return filePath; }
 
 	virtual ~Resource() {}

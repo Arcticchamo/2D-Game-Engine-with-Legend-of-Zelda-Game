@@ -21,14 +21,13 @@ private:
 	GLuint id;
 	std::vector<Sampler> samplers;
 
-	void Load(std::string path);
 	std::string ReadFile(std::string fileName);
 	GLuint GenerateVertexShader(std::string &vertex);
 	GLuint GenerateFragmentShader(std::string &fragment);
 	void CreateProgram(GLuint vertexId, GLuint fragmentId);
 public:
 	~Shader() {}
-	static std::shared_ptr<Shader> Init(std::string path);
+	void Load(std::string path);
 	void SetUniform(std::string uniform, std::shared_ptr<Texture> texture);
 	void SetUniform(std::string uniform, int value);
 	void SetUniform(std::string uniform, float value);

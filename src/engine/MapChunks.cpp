@@ -105,11 +105,11 @@ void MapChunks::CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData)
 	//TODO - CREATE TEXTURE THEN USE A "SETPIXEL()" FUNCTION TO ADD THE INFORMATION OF EACH PIXEL INTO A LOCAL VERTEX
 	//Create Texture
 
-	texture = std::make_shared<Texture>();
+	texture = GetResources()->Create<Texture>(512, 512);
 
 	for (size_t i = 0; i < rgbData.size(); i += 3)
 	{
-		texture->SetPixel(rgbData.at(i), rgbData.at(i + 1), rgbData.at(i + 2), 512, 512);
+		texture->SetPixel(rgbData.at(i), rgbData.at(i + 1), rgbData.at(i + 2));
 	}
 
 	//GLuint textureID;

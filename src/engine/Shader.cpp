@@ -1,13 +1,6 @@
 #include "Shader.h"
 #include "Texture.h"
 
-std::shared_ptr<Shader> Shader::Init(std::string path)
-{
-	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
-	shader->Load(path);
-	return shader;
-}
-
 void Shader::Load(std::string path)
 {
 	id = 0;

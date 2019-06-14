@@ -29,7 +29,7 @@ public:
 
 		//std::shared_ptr<res> r = res::Init(path);
 		std::shared_ptr<R> res = std::make_shared<R>();
-		res = res->Init(path);
+		res->Load(path);
 		resources.push_back(res);
 		return res;
 	}
@@ -38,19 +38,26 @@ public:
 	std::shared_ptr<R> Create()
 	{
 		std::shared_ptr<R> res = std::make_shared<R>();
-		res = res->Init();
+		res->Create();
 		resources.push_back(res);
 		return res;
 	}
 
-	/*
 	template <class R, class A>
 	std::shared_ptr<R> Create(A a)
 	{
-		std::shared_ptr<R> res = std::make_shared(a);
-		res = res->Init();
+		std::shared_ptr<R> res = std::make_shared<R>(a);
+		res->Create(a);
 		resources.push_back(res);
 		return res;
-	}*/
+	}
 
+	template <class R, class A, class B>
+	std::shared_ptr<R> Create(A a, B b)
+	{
+		std::shared_ptr<R> res = std::make_shared<R>(a, b);
+		res->Create(a, b);
+		resources.push_back(res);
+		return res;
+	}
 };

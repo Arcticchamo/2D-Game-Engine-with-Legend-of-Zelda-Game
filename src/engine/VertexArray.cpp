@@ -17,11 +17,11 @@ VertexArray::VertexArray()
 	std::shared_ptr<VertexBuffer> texCoords = std::make_shared<VertexBuffer>();
 
 	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
-	positions->add(glm::vec3(0.0f, 10.0f, 0.0f));
-	positions->add(glm::vec3(10.0f, 10.0f, 0.0f));
+	positions->add(glm::vec3(0.0f, 1.0f, 0.0f));
+	positions->add(glm::vec3(1.0f, 1.0f, 0.0f));
 
-	positions->add(glm::vec3(10.0f, 10.0f, 0.0f));
-	positions->add(glm::vec3(10.0f, 0.0f, 0.0f));
+	positions->add(glm::vec3(1.0f, 1.0f, 0.0f));
+	positions->add(glm::vec3(1.0f, 0.0f, 0.0f));
 	positions->add(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	texCoords->add(glm::vec2(0.0f, 0.0f));

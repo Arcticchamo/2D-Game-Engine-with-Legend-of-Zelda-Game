@@ -2,23 +2,12 @@
 
 Texture::Texture()
 {
-
 }
 
-std::shared_ptr<Texture> Texture::Init()
+Texture::Texture(int texWidth, int texHeight)
 {
-	//Create a texture ptr, load in the texture and return it
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-	texture->Create();
-	return texture;
-}
-
-std::shared_ptr<Texture> Texture::Init(std::string path)
-{
-	//Create a texture ptr, load in the texture and return it
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-	texture->Load(path);
-	return texture;
+	this->texWidth = texWidth;
+	this->texHeight = texHeight;
 }
 
 void Texture::Load(std::string path)
@@ -52,11 +41,11 @@ void Texture::Load(std::string path)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::Create()
+void Texture::Create(int texWidth, int texHeight)
 {
 	dirty = false;
-	texWidth = 0;
-	texHeight = 0;
+	this->texWidth = texWidth;
+	this->texHeight = texHeight;
 
 	glGenTextures(1, &id);
 
@@ -66,13 +55,11 @@ void Texture::Create()
 	}
 }
 
-void Texture::SetPixel(unsigned char r, unsigned char g, unsigned char b, int width, int height)
+void Texture::SetPixel(unsigned char r, unsigned char g, unsigned char b)
 {
 	pixelData.push_back(r);
 	pixelData.push_back(g);
 	pixelData.push_back(b);
-	texWidth = width;
-	texHeight = height;
 	dirty = true;
 }
 
@@ -81,7 +68,7 @@ GLuint Texture::GetId()
 	if (dirty)
 	{
 		glBindTexture(GL_TEXTURE_2D, id);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixelData[0]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &pixelData[0]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);

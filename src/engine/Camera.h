@@ -26,5 +26,11 @@ public:
 	glm::mat4 GetViewMatrix();
 	//Currently not required (TODO: Currenly Depricated, could be used later)
 	CAMERA_TYPE getCameraType() { return cameraType; }
+
+
+
+	//TODO DELETE LATER - TESTING
+	glm::vec3 Movement(glm::vec3 position);
+
 	~Camera();
 };
