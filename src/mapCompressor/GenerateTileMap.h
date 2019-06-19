@@ -53,13 +53,13 @@ public:
 
 	void GenerateFileName();
 	void LoadPNGImage();
-	void GenerateRGB();
+	void GenerateRGBA();
 	void FormatNewTiles();
 	void CreatePNG();
 	void CompressAndGenerateSpriteMap();
 
 	void CalculateRGBValues(int _i, int _j, int &_index);
-	void GetRGB(int _x, int _y, std::array<unsigned char, 3> &_rgb);
+	void GetRGBA(int _x, int _y, std::array<unsigned char, 4> &_rgba);
 	void PrintTile(TileData& tile, int idx);
-	void SetPixels(char r, char g, char b, int x, int y);
+	void SetPixels(char r, char g, char b, char a, int x, int y);
 };

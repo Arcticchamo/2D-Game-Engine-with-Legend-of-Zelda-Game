@@ -15,8 +15,8 @@ void MapChunks::Init(std::shared_ptr<BackGroundMap> map)
 
 void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, int tileHeight, int mapWidth, int mapHeight, std::vector<int> uncompressedTxtData)
 {
-	//Stores a 512 * 512 grid of pixels, each pixel will contain an RGB value
-	std::array <unsigned char, rgbDataSize> rgbData;
+	//Stores a 512 * 512 grid of pixels, each pixel will contain an RGBA value	
+	std::vector<unsigned char> rgbaData(rgbaDataSize);
 
 	//Number of tiles per 512 * 512 pixel chunk
 	int numberOfTilesInChunkX = 512 / tileWidth;
@@ -30,36 +30,36 @@ void MapChunks::CreateChunk(int widthChunks, int heightChunks, int tileWidth, in
 	meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("Mesh");
 	meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 
-	int skip = mapWidth / tileWidth; //Gets the number of tiles along X 
+	int tilesAlongX = mapWidth / tileWidth; //Gets the number of tiles along X 
 
 	for (int y = 0; y < numberOfTilesInChunkY; y++)
 	{
 		for (int x = 0; x < numberOfTilesInChunkX; x++)
 		{
 			//Works out if the current pixel is on the next line or not
-			int tileRowSkip = y * skip + x;
+			int tileRowSkip = y * tilesAlongX + x;
 			//This calculation dictates which chunk is currently being worked on and if it needs to jump pixels or not
-			int ChunkSkip = (heightChunks * skip * numberOfTilesInChunkY) + (widthChunks * numberOfTilesInChunkX);
+			int ChunkRowSkip = (heightChunks * tilesAlongX * numberOfTilesInChunkY) + (widthChunks * numberOfTilesInChunkX);
 			//Combine the two to get the current tile index within the uncompressedTxtData
-			size_t tileIndex = tileRowSkip + ChunkSkip;
+			size_t tileIndex = tileRowSkip + ChunkRowSkip;
 			//This checks whether the current tile Index is out of bounds. This is excess "black space" which does not exist
 			if (tileIndex < uncompressedTxtData.size())
 			{
 				//Assign Tile Index a index value 
 				tileIndex = uncompressedTxtData.at(tileIndex);
-				AssignInformation(tileWidth, tileHeight, tileIndex, x, y, numberOfTilesInChunkX, rgbData);
+				AssignInformation(tileWidth, tileHeight, tileIndex, x, y, numberOfTilesInChunkX, rgbaData);
 			}
 			else
 			{
 				//Assign black to the null information
-				AssignBlackInformation(tileWidth, tileHeight, x, y, numberOfTilesInChunkX, rgbData);
+				AssignBlackInformation(tileWidth, tileHeight, x, y, numberOfTilesInChunkX, rgbaData);
 			}
 		}
 	}
-	CreateTexture(rgbData);
+	CreateTexture(rgbaData);
 
 	//Empty all of the garbage information at the end
-	rgbData.empty();
+	rgbaData.empty();
 }
 
 void MapChunks::AssignInformation(
@@ -67,7 +67,7 @@ void MapChunks::AssignInformation(
 	int tileIndex, 
 	int tileX, int tileY, 
 	int numberOfTilesInChunksX, 
-	std::array <unsigned char, rgbDataSize> &rgbData)
+	std::vector<unsigned char> &rgbaData)
 {
 	//Index used to track the information stored within each tile
 	int index = 0;
@@ -77,19 +77,19 @@ void MapChunks::AssignInformation(
 	{
 		for (int x = 0; x < tileWidth; x++)
 		{								
-			int chunkRowSkip = y * chunkWidth * 3 + x * 3; //Chunk row skip
+			int chunkRowSkip = y * chunkWidth * 4 + x * 4; //Chunk row skip
 			//Tile row skip X and Y
-			int tileSkipY = tileY * (numberOfTilesInChunksX * (tileWidth * 3)) * tileHeight;
-			int tileSkipX = tileX * tileWidth * 3;
+			int tileSkipY = tileY * (numberOfTilesInChunksX * (tileWidth * 4)) * tileHeight;
+			int tileSkipX = tileX * tileWidth * 4;
 			//Combine the skip variables 
 			int skip = chunkRowSkip + (tileSkipY + tileSkipX);
-			//Assign to rgbData the values of Red, Green and Blue (Per pixel). 
-			//Alpha is currently not calculated
-			rgbData.at(skip) = backgroundMap.lock()->getImageTileData(tileIndex, index);
-			rgbData.at(skip + 1) = backgroundMap.lock()->getImageTileData(tileIndex, index + 1);
-			rgbData.at(skip + 2) = backgroundMap.lock()->getImageTileData(tileIndex, index + 2);
+			//Assign to rgbaData the values of Red, Green and Blue (Per pixel)
+			rgbaData.at(skip) = backgroundMap.lock()->getImageTileData(tileIndex, index);
+			rgbaData.at(skip + 1) = backgroundMap.lock()->getImageTileData(tileIndex, index + 1);
+			rgbaData.at(skip + 2) = backgroundMap.lock()->getImageTileData(tileIndex, index + 2);
+			rgbaData.at(skip + 3) = backgroundMap.lock()->getImageTileData(tileIndex, index + 3);
 
-			index += 3;
+			index += 4;
 		}
 	}
 }
@@ -99,7 +99,7 @@ void MapChunks::AssignBlackInformation(
 	int tileWidth, int tileHeight,
 	int tileX, int tileY,
 	int numberOfTilesInChunksX,
-	std::array <unsigned char, rgbDataSize> &rgbData)
+	std::vector<unsigned char> &rgbaData)
 {
 	//Index used to track the information stored within each tile
 	int index = 0;
@@ -109,32 +109,32 @@ void MapChunks::AssignBlackInformation(
 	{
 		for (int x = 0; x < tileWidth; x++)
 		{
-			int chunkRowSkip = y * chunkWidth * 3 + x * 3; //Chunk row skip
+			int chunkRowSkip = y * chunkWidth * 4 + x * 4; //Chunk row skip
 			//Tile row skip X and Y
-			int tileSkipY = tileY * (numberOfTilesInChunksX * (tileWidth * 3)) * tileHeight;
-			int tileSkipX = tileX * tileWidth * 3;
+			int tileSkipY = tileY * (numberOfTilesInChunksX * (tileWidth * 4)) * tileHeight;
+			int tileSkipX = tileX * tileWidth * 4;
 			//Combine the skip variables 
 			int skip = chunkRowSkip + (tileSkipY + tileSkipX);
 
-			//Assign to rgbData the value 0 for black 
-			//Alpha is currently not calculated
-			rgbData.at(skip) = 0;
-			rgbData.at(skip + 1) = 0;
-			rgbData.at(skip + 2) = 0;
+			//Assign to rgbaData the value 0 for black 
+			rgbaData.at(skip) = 0;
+			rgbaData.at(skip + 1) = 0;
+			rgbaData.at(skip + 2) = 0;
+			rgbaData.at(skip + 3) = 0;
 
-			index += 3;
+			index += 4;
 		}
 	}
 }
 
-void MapChunks::CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData)
+void MapChunks::CreateTexture(std::vector<unsigned char> &rgbaData)
 {
 	//Assign "texture" with a fresh set of information. 
 	texture = GetResources()->Create<Texture>(512, 512);
 	//Assign the pixel data to the texture
-	for (size_t i = 0; i < rgbData.size(); i += 3)
+	for (size_t i = 0; i < rgbaData.size(); i += 4)
 	{
-		texture->SetPixel(rgbData.at(i), rgbData.at(i + 1), rgbData.at(i + 2));
+		texture->SetPixel(rgbaData.at(i), rgbaData.at(i + 1), rgbaData.at(i + 2), rgbaData.at(i + 3));
 	}
 	//Assign the texture to the material attached to the object
 	meshRenderer.lock()->GetMaterial()->SetValue("Chunk_Texture", texture);

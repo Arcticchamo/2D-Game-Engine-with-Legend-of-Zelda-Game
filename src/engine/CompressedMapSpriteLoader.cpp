@@ -6,7 +6,7 @@ void CompressedMapSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::v
 	int height = 0;
 	int channels = 0;
 
-	unsigned char *data = stbi_load(fileLocation.c_str(), &width, &height, &channels, 3);
+	unsigned char *data = stbi_load(fileLocation.c_str(), &width, &height, &channels, 4);
 
 	if (!data)
 	{
@@ -16,7 +16,7 @@ void CompressedMapSpriteLoader::LoadInSpriteMap(std::string fileLocation, std::v
 	w = width;
 	h = height;
 
-	int size = (width * height) * 3;
+	int size = (width * height) * 4;
 	imageData.resize(size);
 
 	for (int i = 0; i < size; i++)

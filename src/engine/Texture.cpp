@@ -55,11 +55,12 @@ void Texture::Create(int texWidth, int texHeight)
 	}
 }
 
-void Texture::SetPixel(unsigned char r, unsigned char g, unsigned char b)
+void Texture::SetPixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	pixelData.push_back(r);
 	pixelData.push_back(g);
 	pixelData.push_back(b);
+	pixelData.push_back(a);
 	dirty = true;
 }
 
@@ -68,12 +69,11 @@ GLuint Texture::GetId()
 	if (dirty)
 	{
 		glBindTexture(GL_TEXTURE_2D, id);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &pixelData[0]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixelData[0]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		
-		//TODO SEE IF WIPING THE VECTOR CLEAR SAVES THE INFORMATION
 		pixelData.clear();
 		dirty = false;
 	}

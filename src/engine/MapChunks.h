@@ -14,7 +14,7 @@ class Texture;
 class MapChunks : public Component
 {
 private:
-	static const int rgbDataSize = 512 * 3 * 512;
+	static const int rgbaDataSize = 512 * 4 * 512;
 	static const int chunkWidth = 512;
 	static const int chunkHeight = 512;
 	std::weak_ptr<BackGroundMap> backgroundMap;
@@ -24,9 +24,9 @@ private:
 
 	std::shared_ptr<Texture> texture; //Texture to store the map 
 
-	void CreateTexture(std::array <unsigned char, rgbDataSize> &rgbData);
-	void AssignInformation(int tileWidth, int tileHeight, int tileIndex, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData);
-	void AssignBlackInformation(int tileWidth, int tileHeight, int tileX, int tileY, int numberOfTilesInChunksX, std::array <unsigned char, rgbDataSize> &rgbData);
+	void CreateTexture(std::vector<unsigned char> &rgbaData);
+	void AssignInformation(int tileWidth, int tileHeight, int tileIndex, int tileX, int tileY, int numberOfTilesInChunksX, std::vector<unsigned char> &rgbaData);
+	void AssignBlackInformation(int tileWidth, int tileHeight, int tileX, int tileY, int numberOfTilesInChunksX, std::vector<unsigned char> &rgbaData);
 public:
 	void Init(std::shared_ptr<BackGroundMap> map);
 

@@ -13,7 +13,7 @@ class GameObject;
 
 struct ImageDataTile
 {
-	std::vector<unsigned char> RGBValues;
+	std::vector<unsigned char> RGBAValues;
 };
 
 class BackGroundMap : public Component
@@ -42,11 +42,9 @@ private:
 public:
 	void Init(std::string fileLocation);
 
-	void Render();
-
 	unsigned int getImageTilesSize();
 	unsigned int getImageTilesSize(int index);
-	unsigned char getImageTileData(int tileIndex, int RGBindex);
+	unsigned char getImageTileData(int tileIndex, int RGBAindex);
 
 	~BackGroundMap() {}
 };

@@ -7,9 +7,6 @@
 void BackGroundMap::Init(std::string fileLocation)
 {
 	this->fileLocation = fileLocation;
-	//transform = gameObject.lock()->AddComponent<Transform>();
-	//meshRenderer = gameObject.lock()->AddComponent<MeshRenderer>("Mesh");
-	//meshRenderer.lock()->GetMaterial()->SetShader(GetResources()->Load<Shader>("Shaders"));
 	GenerateBackGroundMap();
 }
 
@@ -78,30 +75,18 @@ void BackGroundMap::SeperateImageData(std::vector<unsigned char> &compressedImag
 			for (int x = 0; x < tileWidth; x++)
 			{
 				//Skip skips a single row of pixels (timesed by Y)
-				int skip = (y * compressedMapWidth * 3 + x * 3) + (i * tileWidth * 3);
+				int skip = (y * compressedMapWidth * 4 + x * 4) + (i * tileWidth * 4);
 
-				//Assign R, G, B information for individual pixel
-				newTile.RGBValues.push_back(compressedImageData.at(skip));
-				newTile.RGBValues.push_back(compressedImageData.at(skip + 1));
-				newTile.RGBValues.push_back(compressedImageData.at(skip + 2));
+				//Assign R, G, B, A information for individual pixel
+				newTile.RGBAValues.push_back(compressedImageData.at(skip));
+				newTile.RGBAValues.push_back(compressedImageData.at(skip + 1));
+				newTile.RGBAValues.push_back(compressedImageData.at(skip + 2));
+				newTile.RGBAValues.push_back(compressedImageData.at(skip + 3));
 			}
 		}
 		imageTiles.push_back(newTile);
 	}
 	compressedImageData.clear();
-}
-
-void BackGroundMap::Render()
-{
-	//for (unsigned int i = 0; i < chunks.size(); i++)
-	//{
-	//	glm::mat4 model(1.0f);
-	//	model = glm::translate(model, chunks.at(i).GetPosition());
-	//	model = glm::scale(model, glm::vec3(512, 512, 1));
-	//	
-	//	//Resources::SetUniform("in_ModelMat", model);
-	//	//meshRenderer->Render(chunks.at(i).GetTexture());
-	//}	
 }
 
 //Returns the image tiles size
@@ -110,14 +95,14 @@ unsigned int BackGroundMap::getImageTilesSize()
 	return imageTiles.size();
 }
 
-//returns the amount of stored RGB values within a specific tile
+//returns the amount of stored RGBA values within a specific tile
 unsigned int BackGroundMap::getImageTilesSize(int index)
 {
-	return imageTiles.at(index).RGBValues.size();
+	return imageTiles.at(index).RGBAValues.size();
 }
 
-//returns a specific RGB value from a specific tile
-unsigned char BackGroundMap::getImageTileData(int tileIndex, int RGBindex)
+//returns a specific RGBA value from a specific tile
+unsigned char BackGroundMap::getImageTileData(int tileIndex, int RGBAindex)
 {
-	return imageTiles.at(tileIndex).RGBValues.at(RGBindex);
+	return imageTiles.at(tileIndex).RGBAValues.at(RGBAindex);
 }

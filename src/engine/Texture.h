@@ -18,7 +18,7 @@ public:
 	Texture(int texWidth, int texHeight);
 	void Load(std::string path);
 	void Create(int texWidth, int texHeight);
-	void SetPixel(unsigned char r, unsigned char g, unsigned char b);
+	void SetPixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	GLuint GetId();
 	~Texture();
 };

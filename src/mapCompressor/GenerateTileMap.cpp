@@ -25,7 +25,7 @@ void GenerateTileMap::Run()
 {
 	GenerateFileName();
 	LoadPNGImage();
-	GenerateRGB();
+	GenerateRGBA();
 	FormatNewTiles();
 	CreatePNG();
 	CompressAndGenerateSpriteMap();
@@ -45,7 +45,7 @@ void GenerateTileMap::LoadPNGImage()
 	//Load the file
 	int channels = 0;
 	map.data = stbi_load(map.fileLocation.c_str(), 
-		&map.mapWidth, &map.mapHeight, &channels, 3);
+		&map.mapWidth, &map.mapHeight, &channels, 4);
 
 	if (map.data == NULL)
 	{
@@ -53,7 +53,7 @@ void GenerateTileMap::LoadPNGImage()
 	}
 }
 
-void GenerateTileMap::GenerateRGB()
+void GenerateTileMap::GenerateRGBA()
 {
 	//Tracks what the index of the tile is 
 	int index = 0;
@@ -75,17 +75,18 @@ void GenerateTileMap::GenerateRGB()
 void GenerateTileMap::CalculateRGBValues(int _i, int _j, int & _index)
 {
 	TileData newTile;
-	newTile.data.resize(map.tileWidth * map.tileHeight * 3);
-	std::array<unsigned char, 3> rgb;
+	newTile.data.resize(map.tileWidth * map.tileHeight * 4);
+	std::array<unsigned char, 4> rgba;
 
 	for (int y = 0; y < map.tileHeight; y++)
 	{
 		for (int x = 0; x < map.tileWidth; x++)
 		{
-			GetRGB(_j + x, _i + y, rgb);
-			newTile.data.at(y * map.tileHeight * 3 + x * 3) = rgb.at(0);
-			newTile.data.at(y * map.tileHeight * 3 + x * 3 + 1) = rgb.at(1);
-			newTile.data.at(y * map.tileHeight * 3 + x * 3 + 2) = rgb.at(2);
+			GetRGBA(_j + x, _i + y, rgba);
+			newTile.data.at(y * map.tileHeight * 4 + x * 4) = rgba.at(0);
+			newTile.data.at(y * map.tileHeight * 4 + x * 4 + 1) = rgba.at(1);
+			newTile.data.at(y * map.tileHeight * 4 + x * 4 + 2) = rgba.at(2);
+			newTile.data.at(y * map.tileHeight * 4 + x * 4 + 3) = rgba.at(3);
 		}
 	}
 
@@ -111,13 +112,14 @@ void GenerateTileMap::CalculateRGBValues(int _i, int _j, int & _index)
 	}
 }
 
-void GenerateTileMap::GetRGB(int _x, int _y, std::array<unsigned char, 3>& _rgb)
+void GenerateTileMap::GetRGBA(int x, int y, std::array<unsigned char, 4>& rgba)
 {
-	unsigned char* p = map.data + ((_y * map.mapWidth * 3) + (_x * 3));
+	unsigned char* p = map.data + ((y * map.mapWidth * 4) + (x * 4));
 
-	_rgb.at(0) = *p;
-	_rgb.at(1) = *(p + 1);
-	_rgb.at(2) = *(p + 2);
+	rgba.at(0) = *p;
+	rgba.at(1) = *(p + 1);
+	rgba.at(2) = *(p + 2);
+	rgba.at(3) = *(p + 3);
 }
 
 void GenerateTileMap::FormatNewTiles()
@@ -139,21 +141,23 @@ void GenerateTileMap::PrintTile(TileData & tile, int idx)
 	{
 		for (int x = 0; x < map.tileWidth; x++)
 		{
-			char r = tile.data.at(y * map.tileHeight * 3 + x * 3);
-			char g = tile.data.at(y * map.tileHeight * 3 + x * 3 + 1);
-			char b = tile.data.at(y * map.tileHeight * 3 + x * 3 + 2);
+			char r = tile.data.at(y * map.tileHeight * 4 + x * 4);
+			char g = tile.data.at(y * map.tileHeight * 4 + x * 4 + 1);
+			char b = tile.data.at(y * map.tileHeight * 4 + x * 4 + 2);
+			char a = tile.data.at(y * map.tileHeight * 4 + x * 4 + 3);
 
-			SetPixels(r, g, b, x + idx * map.tileHeight, y);
+			SetPixels(r, g, b, a, x + idx * map.tileHeight, y);
 		}
 	}
 }
 
-void GenerateTileMap::SetPixels(char r, char g, char b, int x, int y)
+void GenerateTileMap::SetPixels(char r, char g, char b, char a, int x, int y)
 {
-	int t = y * output.w * 3 + x * 3;
+	int t = y * output.w * 4 + x * 4;
 	output.data.at(t) = r;
 	output.data.at(t + 1) = g;
 	output.data.at(t + 2) = b;
+	output.data.at(t + 3) = a;
 }
 
 void GenerateTileMap::CreatePNG()
@@ -165,13 +169,13 @@ void GenerateTileMap::CreatePNG()
 	{
 		std::string outFileLoc = output.fileName + ".png";
 		stbi_write_png(outFileLoc.c_str(), newWidth, newHeight,
-					3, &output.data.at(0), 3 * newWidth);
+					4, &output.data.at(0), 4 * newWidth);
 	}
 	else
 	{
 		std::string outFileLoc = output.outputFileLocation + "/" + output.fileName + ".png";
 		stbi_write_png(outFileLoc.c_str(), newWidth, newHeight, 
-					3, &output.data.at(0), 3 * newWidth);
+					4, &output.data.at(0), 4 * newWidth);
 	}
 }
 
@@ -189,22 +193,6 @@ void GenerateTileMap::CompressAndGenerateSpriteMap()
 		throw std::exception();
 	}
 
-	//std::string fileOutLoc = output.outputFileLocation + "/"
-	//							+ output.fileName + ".txt";
-	//std::FILE *f = fopen(fileOutLoc.c_str(), "wb");
-
-	//if (f == NULL)
-	//{
-	//	throw std::exception();
-	//}
-
-	//for (int i = 0; i < compressedLength; i++)
-	//{
-	//	fprintf(f, "%c", compressedIndexTracker.at(i));
-	//}
-
-	//fclose(f);
-
 	std::ofstream myfile;
 	
 	if (output.outputFileLocation.length() != 0)
@@ -221,8 +209,6 @@ void GenerateTileMap::CompressAndGenerateSpriteMap()
 
 	if (myfile.is_open())
 	{
-		//myfile << "w " << map.tileWidth << std::endl;
-		//myfile << "h " << map.tileHeight << std::endl;
 		for (size_t i = 0; i < compressedLength; i++)
 		{
 			myfile << compressedIndexTracker.at(i);

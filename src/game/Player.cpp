@@ -42,10 +42,10 @@ void Player::InputController(glm::vec3 &position, glm::vec3 &rotation, glm::vec3
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 
-	if (state[SDL_SCANCODE_UP]) position.y -= 10.0f;
-	if (state[SDL_SCANCODE_DOWN]) position.y += 10.0f;
-	if (state[SDL_SCANCODE_LEFT]) position.x -= 10.0f;
-	if (state[SDL_SCANCODE_RIGHT]) position.x += 10.0f;
+	if (state[SDL_SCANCODE_UP]) position.y -= 2.5f;
+	if (state[SDL_SCANCODE_DOWN]) position.y += 2.5f;
+	if (state[SDL_SCANCODE_LEFT]) position.x -= 2.5f;
+	if (state[SDL_SCANCODE_RIGHT]) position.x += 2.5f;
 
 	//if (state[SDL_SCANCODE_W]) _pos.y -= 10.0f;
 	//if (state[SDL_SCANCODE_S]) _pos.y += 10.0f;
